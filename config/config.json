@@ -1,0 +1,10 @@
+{
+  "development": {
+    "username": "rachelhigley",
+    "password": "",
+    "database": "flight_training",
+    "host": "127.0.0.1",
+    "port": "5432",
+    "dialect": "postgres"
+  }
+}
