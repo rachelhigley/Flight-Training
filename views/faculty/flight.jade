@@ -66,6 +66,26 @@ block content
               .form-group
                 button.btn.btn-warning(type="submit") Create Area
 
+        .box
+          .box-header
+            h3.box-title Teachers
+          .box-body.no-padding
+            ul.nav.nav-pills.nav-stacked
+              for teacher in course.Users
+                li
+                  a #{teacher.name}
+          .box-footer
+            form(action="#{course.id}/teacher",method="POST")
+              .form-group
+                label(for="teacher") New teacher
+                select.form-control#teacher(name="UserId")
+                  option Select One
+                  for teacher in users
+                    option(value="#{teacher.id}") #{teacher.name}
+              .form-group
+                button.btn.btn-warning(type="submit") Add Teacher
+
+
 
       .col-md-6
         .box
@@ -76,6 +96,7 @@ block content
               for area in course.Areas
                 li.active
                   a
+                    | Area:&nbsp;
                     strong #{area.name}
                 for mission in area.Missions
                   li
@@ -95,7 +116,7 @@ block content
                 label(for="name") Name
                 input.form-control(type="text", id="name", name="name")
 
-              textarea.textarea(placeholder='Description', style='width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;')
+              textarea.textarea(name="description", placeholder='Description', style='width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;')
 
               .form-group
                 button.btn.btn-warning(type="submit") Create Mission

@@ -12,11 +12,16 @@ router.get '/github', passport.authenticate('github'), (req, res) ->
 #   login page.  Otherwise, the primary route function function will be called,
 #   which, in this example, will redirect the user to the home page.
 router.get '/github/callback', passport.authenticate('github', failureRedirect: '/'), (req, res) ->
-  console.log req.session.passport.user.UserTypeId
-  if req.session.passport.user.UserTypeId is 1
+  if req.user.UserTypeId is 1
     res.redirect '/flights'
   else
-    res.redirect '/faculty/flights'
+    res.redirect '/faculty/dashboard'
+
+
+router.get '/logout', (req, res, next) ->
+  req.logout()
+  req.session.destroy () ->
+    res.redirect '/'
 
 
 module.exports = router

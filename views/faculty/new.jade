@@ -12,14 +12,16 @@ block content
       li.active New
   //- Main content
   section.content
-    form.box.box-warning(action="/faculty/flights", method="POST")
-      .box-body
-        .form-group
-          label(for="name") Name:
-          input.form-control(type="text", id="name", name="name")
-        .form-group
-          label(for="abbr") Abbreviation:
-          input.form-control(type="text", id="abbr", name="abbr")
-      .box-footer
-        .form-group
-          button.btn.btn-primary(type="submit") Create Course
+    .row
+      .col-md-6
+        form.box.box-warning(action="/faculty/flights", method="POST")
+          .box-body
+            .form-group
+              label(for="name") Name:
+              input.form-control(type="text", id="name", name="name")
+            .form-group
+              label(for="abbr") Abbreviation:
+              input.form-control(type="text", id="abbr", name="abbr")
+          .box-footer
+            .form-group
+              button.btn.btn-primary(type="submit") Create Course

@@ -12,3 +12,7 @@ module.exports = (sequelize, DataTypes) ->
 
       Mission.belongsTo models.Area,
         onDelete: 'cascade'
+
+      Mission.belongsToMany models.User,
+        through: models.StudentMission
+        onDelete: 'cascade'

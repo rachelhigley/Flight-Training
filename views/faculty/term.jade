@@ -1,0 +1,56 @@
+extends ../layout
+block content
+  section.content-header
+    h1 #{term.name}
+    ol.breadcrumb
+      li
+        a(href='/faculty/flights/')
+          i.fa.fa-dashboard
+          |  Flights
+      li
+        a(href="/faculty/flights/#{term.CourseId}")
+          | #{term.Course.abbr}
+      li.active #{term.name}
+  //- Main content
+  section.content
+    .row
+      .col-md-6
+        .box
+          .box-header
+            h3.box-title Pending Missions
+          .box-body
+            #missions.box-group
+              for studentMission in missions
+                .panel.box
+                  h4.box-title
+                    a(data-toggle="collapse", data-parent="#missions",href="#mission-#{studentMission.Mission.id}")
+                      | #{studentMission.Mission.name}
+                    .btn-group.btn-group-xs.pull-right
+                      a(href="/faculty/flights/#{term.CourseId}/term/#{term.id}/mission/#{studentMission.MissionId}/4").btn.btn-danger Reject
+                      a(href="/faculty/flights/#{term.CourseId}/term/#{term.id}/mission/#{studentMission.MissionId}/3").btn.btn-success Accept
+
+                  .panel-collapse.collapse(id="mission-#{studentMission.Mission.id}")
+                    .box-body
+                      | !{studentMission.Mission.description}
+
+      .col-md-6
+        .box
+          .box-header
+            h3.box-title Students
+
+          .box-body.no-padding
+            ul.nav.nav-pills.nav-stacked
+              for student in term.Users
+                li
+                  a #{student.name}
+          .box-footer
+            form(action="#{term.id}/student",method="POST")
+              .form-group
+                label(for="student") New Student
+                select.form-control#student(name="UserId")
+                  option Select One
+                  for student in users
+                    option(value="#{student.id}") #{student.name}
+              .form-group
+                button.btn.btn-warning(type="submit") Add Student
+

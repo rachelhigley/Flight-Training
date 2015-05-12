@@ -20,3 +20,7 @@ module.exports = (sequelize, DataTypes) ->
       User.belongsToMany models.Term,
         through: 'Month'
         onDelete: 'cascade'
+
+      User.belongsToMany models.Mission,
+        through: models.StudentMission
+        onDelete: 'cascade'

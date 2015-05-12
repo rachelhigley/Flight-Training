@@ -8,6 +8,8 @@ module.exports = (sequelize, DataTypes) ->
   , classMethods:
     associate: (models) ->
 
+      Term.belongsTo models.Course,
+        onDelete: 'cascade'
       Term.belongsToMany models.User,
         through: 'Month'
         onDelete: 'cascade'
