@@ -2,15 +2,8 @@ express = require('express')
 router  = express.Router()
 models  = appRequire('models')
 
-# list of all the courses for that teacher
-router.get '/', (req, res, next) ->
-  models.User.find
-    where:
-      github_id: req.session.passport.user.github_id
-    include: [{ all: true, nested: true }]
-  .then (user) ->
-    res.render 'faculty/flights',
-      flights: user.Courses
+router.get '/new', (req, res, next) ->
+  res.render 'faculty/new'
 
 # create a course with it's levels
 router.post '/', (req, res,next) ->
@@ -93,5 +86,7 @@ router.post '/:course_id/mission', (req, res, next) ->
   .then () ->
     res.redirect '/faculty/flights/'+req.params.course_id
 
+router.get '/:course_id/term/:term_id', (req, res, next) ->
+  res.render '/faculty/term'
 
 module.exports = router

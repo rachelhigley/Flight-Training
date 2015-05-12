@@ -1,62 +1,101 @@
-h1 Months
-ul
-  for term in course.Terms
-    li
-      a(href="/faculty/term/#{term.id}") #{term.name}
-form(action="#{course.id}/term", method="POST")
-  h4 New Term
-  div
-    label(for="name") Name
-    input(type="text", id="name", name="name")
-  div
-    input(type="hidden", name="CourseId", value="#{course.id}")
-  div
-    button(type="submit") Create Term
+extends ../layout
 
-h1 Levels
-for level in course.Levels
-  form(action="#{course.id}/level/#{level.id}",method="POST")
-    h3 #{level.name}
-    label(for="#{level.name}-toComplete") Number of Missions to Complete Level:
-    input(type="text", id="#{level.name}-toComplete",name="to_complete",value="#{level.to_complete}")
-    button(type="submit") Save
+block content
+  section.content-header
+    h1 #{course.name}
+    ol.breadcrumb
+      li
+        a(href='#')
+          i.fa.fa-dashboard
+          |  Flights
+      li.active #{course.abbr}
+  //- Main content
+  section.content
+    .row
+      .col-md-6
+        .box
+          .box-header.with-border
+            h3.box-title Terms
+          .box-body.no-padding
+            ul.nav.nav-pills.nav-stacked
+              for term in course.Terms
+                li
+                  a(href="/faculty/flights/#{course.id}/term/#{term.id}")
+                    | #{term.name}
+                    i.fa.fa-chevron-right.pull-right
+          .box-footer
+            form(action="#{course.id}/term", method="POST")
+              label(for="name") New Term Name
+              .input-group
+                input.form-control(type="text", id="name", name="name")
+                span.input-group-btn
+                  button.btn.btn-warning(type="submit") Create Term
+        .box.box-warning
+          .box-header
+            h3.box-title Levels
+          .box-body.table-responsive
+            table.table
+              tr
+                td(width="50%") Name
+                td Mission to complete the Level
+              for level in course.Levels
+                tr
+                  form(action="#{course.id}/level/#{level.id}",method="POST")
+                    td.text-uppercase #{level.name}
+                    td
+                      .input-group
+                        input.form-control(type="text", id="#{level.name}-toComplete",name="to_complete",value="#{level.to_complete}")
+                        span.input-group-btn
+                          button.btn.btn-warning(type="submit") Save
+        .box
+          .box-header
+            h3.box-title New Area
+          .box-body
+            form(action="#{course.id}/area",method="POST")
+              label Include in Levels:
+              .form-group
+                for level in course.Levels
+                  .checkbox
+                    label.text-uppercase(for="level-#{level.id}")
+                      input(id="level-#{level.id}", type="checkbox", name="levels[]",value="#{level.id}")
+                      | #{level.name}
+              .form-group
+                label(for="name") Name
+                input.form-control(type="text", id="name", name="name")
 
-h1 Missions
-ul
-  for area in course.Areas
-    h3 #{area.name}
-    for mission in area.Missions
-      li #{mission.name}
+              .form-group
+                button.btn.btn-warning(type="submit") Create Area
 
-form(action="#{course.id}/area",method="POST")
-  h4 New Area
-  div
-    p Include in Levels:
-    for level in course.Levels
-      div
-        input(type="checkbox", name="levels[]",value="#{level.id}")
-        label(for="level-#{level.id}") #{level.name}
-  div
-    label(for="name") Name
-    input(type="text", id="name", name="name")
 
-  div
-    button(type="submit") Create Area
+      .col-md-6
+        .box
+          .box-header.with-border
+            h3.box-title Missions
+          .box-body.no-padding
+            ul.nav.nav-pills.nav-stacked
+              for area in course.Areas
+                li.active
+                  a
+                    strong #{area.name}
+                for mission in area.Missions
+                  li
+                    a(href="#") #{mission.name}
+        .box
+          .box-header
+            h3.box-title New Mission
+          .box-body
 
-form(action="#{course.id}/mission",method="POST")
-  h4 New Area
-  div
-    label(for="area") Area
-    select#area(name="AreaId")
-      for area in course.Areas
-        option(value="#{area.id}") #{area.name}
-  div
-    label(for="name") Name
-    input(type="text", id="name", name="name")
+            form(action="#{course.id}/mission",method="POST")
+              .form-group
+                label(for="area") Area
+                select.form-control#area(name="AreaId")
+                  for area in course.Areas
+                    option.text-uppercase(value="#{area.id}") #{area.name}
+              .form-group
+                label(for="name") Name
+                input.form-control(type="text", id="name", name="name")
 
-  div
-    label(for="body") Description
-    input(type="text", id="body", name="body")
+              textarea.textarea(placeholder='Description', style='width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;')
 
-  div
-    button(type="submit") Create Mission
+              .form-group
+                button.btn.btn-warning(type="submit") Create Mission

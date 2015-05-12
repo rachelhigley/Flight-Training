@@ -42,6 +42,19 @@ app.use require('node-sass-middleware')
   outputStyle: 'compressed'
   prefix: '/prefix.'
 
+# add styles to all pages
+app.use (req, res, next) ->
+
+  models = appRequire('models')
+  models.User.find
+    where:
+      github_id: req.session.passport.user.github_id
+    include: models.Course
+  .then (user) ->
+    app.locals.courses = user.Courses
+    app.locals.type = if user.UserTypeId is 2 then 'faculty' else ''
+    next()
+
 # setup routes
 appRequire('routes') app
 
