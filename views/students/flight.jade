@@ -1,0 +1,77 @@
+extends ../layout
+
+block content
+  section.content-header
+    h1 #{course.name}
+    ol.breadcrumb
+      li
+        a(href='#')
+          i.fa.fa-dashboard
+          |  Flights
+      li.active #{course.abbr}
+  //- Main content
+  section.content
+    .row
+      .col-md-6
+        ul.timeline#timeline
+          - var j = -1
+          for level in course.Levels
+            li.time-label
+              span.bg-gray.text-uppercase
+                | #{level.name}
+            - if(nextLevelLocked) {
+            -  level.to_complete = 1;
+            -  locked = true;
+            - }
+            - for (var i = 0; i < level.to_complete; ++i) { j++
+            - if (!missions[j] && !nextLevelLocked) {nextLevelLocked = true; unlockedLevel = level.id}
+              if locked
+                li.timeline-item.locked
+                  i.fa.fa-lock
+                  .timeline-item.locked
+                    h3.timeline-header Level Locked
+              else if !missions[j]
+                li.timeline-item.open
+                  i.fa.fa-circle-o
+                  .timeline-item
+                    h3.timeline-header Drag Mission Here
+              else
+                li.timeline-item
+                  if missions[j].MissionStatusId === 1
+                    i.fa.fa-circle.bg-yellow
+                    .timeline-item
+                      h3.timeline-header(mission-id="#{missions[j].Mission.id}")
+                        | #{missions[j].Mission.name}
+                        a(href="#").btn.btn-xs.btn-success.pull-right Complete
+                  else if missions[j].MissionStatusId === 2
+                    i.fa.fa-clock-o.bg-blue
+                    .timeline-item
+                      h3.timeline-header #{missions[j].Mission.name}
+                  else if missions[j].MissionStatusId === 3
+                    i.fa.fa-check.bg-green
+                    .timeline-item
+                      h3.timeline-header #{missions[j].Mission.name}
+                  else if missions[j].MissionStatusId === 4
+                    i.fa.fa-times.bg-red
+                    .timeline-item
+                      h3.timeline-header
+                        | #{missions[j].Mission.name}
+                        a(href="#").btn.btn-xs.btn-danger.pull-right Resubmit
+            - }
+      .col-md-6
+        .box
+          .box-header.with-border
+            h3.box-title Missions
+          .box-body.no-padding
+            ul#missions.nav.nav-pills.nav-stacked
+              for area in course.Areas
+                for level in area.Levels
+                  - if (level.id === unlockedLevel) areaOpen = true
+                if areaOpen
+                  li.active
+                    a
+                      | Area:&nbsp;
+                      strong #{area.name}
+                  for mission in area.Missions
+                    li(mission-id="#{mission.id}")
+                      a(href="#") #{mission.name}
