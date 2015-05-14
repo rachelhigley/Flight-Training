@@ -14,8 +14,8 @@ block content
                 | #{level.name}
             - if(previous_index !== false && lockedItems != course.Levels[previous_index].to_complete) {
               li.timeline-item.locked
+                i.fa
                 .timeline-item
-                  i.fa
                   h3.timeline-header Complete missions in previous levels to unlock this one
             -} else {
 
@@ -24,8 +24,8 @@ block content
 
              if !levels[index] || !levels[index].StudentMissions[i]
                 li.timeline-item.select(data-toggle="collapse", href="#mission-#{j}",level-id="#{level.id}")
+                  i.fa
                   .timeline-item
-                    i.fa
                     h3.timeline-header Select Mission
                     .timeline-body.collapse(id="mission-#{j}")
                         for area in level.Areas
@@ -44,8 +44,8 @@ block content
               else
                 if levels[index].StudentMissions[i].MissionStatusId === 1
                   li.timeline-item.submit(mission-id="#{levels[index].StudentMissions[i].id}")
+                    i.fa
                     .timeline-item
-                      i.fa
                       h3.timeline-header
                         | #{levels[index].StudentMissions[i].Mission.name}
                       .timeline-body
@@ -54,8 +54,8 @@ block content
                 else if levels[index].StudentMissions[i].MissionStatusId === 2
                   - lockedItems++
                   li.timeline-item.resubmit(mission-id="#{levels[index].StudentMissions[i].id}")
+                    i.fa
                     .timeline-item
-                      i.fa
                       h3.timeline-header
                         | #{levels[index].StudentMissions[i].Mission.name}
                       .timeline-body
@@ -64,8 +64,8 @@ block content
                 else if levels[index].StudentMissions[i].MissionStatusId === 3
                   - lockedItems++
                   li.timeline-item.pending
+                    i.fa
                     .timeline-item
-                      i.fa
                       h3.timeline-header #{levels[index].StudentMissions[i].Mission.name}
                       .timeline-body
                         for comment in levels[index].StudentMissions[i].Comments
@@ -73,12 +73,15 @@ block content
                 else if levels[index].StudentMissions[i].MissionStatusId === 4
                   - lockedItems++
                   li.timeline-item.complete
+                    i.fa
                     .timeline-item
-                      i.fa
                       h3.timeline-header #{levels[index].StudentMissions[i].Mission.name}
                       .timeline-body
                         for comment in levels[index].StudentMissions[i].Comments
-                          include ../common/comment
+                          if comment.CommentTypeId !== 1
+                            blockquote.embedly-card
+                              strong !{comment.User.name}:&nbsp;
+                              !{comment.text}
 
             - } }
 

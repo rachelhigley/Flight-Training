@@ -45,6 +45,7 @@ li.ui-state-hover .timeline-item{
 .timeline>li.time-label.unlocked:before {
   border-color: #21C0B5;
   height: 25px;
+  top: 30px;
 }
 .timeline>li.time-label.locked span {
   background-color: #d2d6de;
@@ -61,19 +62,25 @@ li.ui-state-hover .timeline-item{
   width: 0px;
   height: 0;
   position: absolute;
-  top: -25px;
   left: 46px;
   transition: 0.5s all 0.5s;
+  bottom: -10px;
+  top: 0;
 }
 
 .timeline li.timeline-item i.fa {
-  border-radius: 0;
+  border-radius: 2px 0 0 2px;
   width: 60px;
-  height: 60px;
+  height: 61px;
   margin-right: 20px;
-  float: left;
   text-align: center;
   color: #fff;
+  z-index: 1;
+  border-right: none;
+}
+
+.timeline-item .list-group i.fa {
+  float: left;
 }
 .timeline li.timeline-item i:before
 {
@@ -101,7 +108,11 @@ li.ui-state-hover .timeline-item{
 }
 .timeline>li.complete:before {
   border-color: #21C0B5;
-  height: 25px;
+  height: 100%;
+  padding-bottom: 20px;
+  box-sizing: content-box;
+  top: 0;
+  /* z-index: 0; */
 }
 
 .timeline .pending i {
@@ -115,7 +126,9 @@ li.ui-state-hover .timeline-item{
 }
 .timeline>li.pending:before {
   border-color: #83CAC3;
-  height: 25px;
+  height: 100%;
+  padding-bottom: 20px;
+  box-sizing: content-box;
 }
 
 .timeline .resubmit i {
@@ -144,13 +157,13 @@ li.ui-state-hover .timeline-item{
   content: 'submit';
 }
 
-.select i {
+.select i.fa {
   background-color: #F3C070;
 }
-.select i:before {
+.select i.fa:before {
   content: "\f10c";
 }
-.select i:after {
+.select i.fa:after {
   content: 'select';
 }
 
@@ -218,11 +231,13 @@ li.ui-state-hover .timeline-item{
 
 li.timeline-item .timeline-item
 {
-  margin-left: 18px;
+  margin-left: 77px;
   margin-right: 1px;
+  box-shadow: none;
+  -webkit-box-shadow: none;
 }
 .timeline>li>.timeline-item>.timeline-header {
-  padding: 21px 75px;
+  padding: 21px 10px;
 }
 
 .timeline .list-group-item {
@@ -240,8 +255,7 @@ li.timeline-item .timeline-item
   line-height: 40px;}
 
 li.selected .timeline-item {
-    margin-left: -60px;
-    /* float: left; */
+    /* margin-left: -60px; */
 }
 .timeline-item {
   transition: 0.5s right;
@@ -249,7 +263,10 @@ li.selected .timeline-item {
 }
 .timeline-item.selected {
     right: -100%;
-
+}
+.timeline-item.selected i.fa
+{
+  margin-left: -77px
 }
 
 .timeline-item.selected input {
@@ -265,7 +282,9 @@ li.selected .timeline-item {
 .timeline-item input {
   width: 0;
 }
-
+.timeline-item form {
+  margin: 10px 0 ;
+}
 .timeline-item form input{
   width: 100%;
 }
