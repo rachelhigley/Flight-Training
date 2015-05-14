@@ -13,6 +13,43 @@ block content
   section.content
     .row
       .col-md-6
+        ul.timeline
+          li.timeline-item.add
+            .timeline-item
+              i.fa
+              h3.timeline-header New Mission
+              .timeline-body
+                form(action="#{course.id}/mission",method="POST")
+                  .form-group
+                    label(for="area") Area
+                    select.form-control#area(name="AreaId")
+                      for area in course.Areas
+                        option.text-uppercase(value="#{area.id}") #{area.name}
+                  .form-group
+                    label(for="name") Name
+                    input.form-control(type="text", id="name", name="name")
+
+                  textarea.textarea(name="description", placeholder='Description')
+
+                  .form-group
+                    button.btn.btn-warning(type="submit") Create Mission
+
+          for area in course.Areas
+            li.time-label.locked
+              span.text-uppercase
+                | #{area.name}
+            for mission in area.Missions
+              li.timeline-item.remove
+                .timeline-item
+                  i.fa
+                  h3.timeline-header #{mission.name}
+                  .timeline-body
+                    form(action="#{course.id}/mission/#{mission.id}",method="POST")
+                      textarea.textarea(name="description", placeholder='Description') !{mission.description}
+                      .form-group
+                        button.btn.btn-warning(type="submit")
+                          | Update Mission
+      .col-md-6
         .box
           .box-header.with-border
             h3.box-title Terms
@@ -85,38 +122,3 @@ block content
               .form-group
                 button.btn.btn-warning(type="submit") Add Teacher
 
-
-
-      .col-md-6
-        .box
-          .box-header.with-border
-            h3.box-title Missions
-          .box-body.no-padding
-            ul.nav.nav-pills.nav-stacked
-              for area in course.Areas
-                li.active
-                  a
-                    | Area:&nbsp;
-                    strong #{area.name}
-                for mission in area.Missions
-                  li
-                    a(href="#") #{mission.name}
-        .box
-          .box-header
-            h3.box-title New Mission
-          .box-body
-
-            form(action="#{course.id}/mission",method="POST")
-              .form-group
-                label(for="area") Area
-                select.form-control#area(name="AreaId")
-                  for area in course.Areas
-                    option.text-uppercase(value="#{area.id}") #{area.name}
-              .form-group
-                label(for="name") Name
-                input.form-control(type="text", id="name", name="name")
-
-              textarea.textarea(name="description", placeholder='Description', style='width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;')
-
-              .form-group
-                button.btn.btn-warning(type="submit") Create Mission

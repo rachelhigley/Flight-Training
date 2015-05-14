@@ -6,3 +6,5 @@ module.exports = (sequelize, DataTypes) ->
       StudentMission.belongsTo models.User
       StudentMission.belongsTo models.Mission
       StudentMission.belongsTo models.MissionStatus
+      StudentMission.belongsTo models.Level
+      StudentMission.hasMany models.Comment

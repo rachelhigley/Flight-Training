@@ -45,7 +45,8 @@ app.use require('node-sass-middleware')
 # add styles to all pages
 app.use (req, res, next) ->
 
-  if req.isAuthenticated()
+  app.locals.user = req.user
+  if req.user
     models = appRequire('models')
     if req.user.UserTypeId is 2
       include = models.Course

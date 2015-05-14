@@ -36,7 +36,7 @@ router.post '/', (req, res,next) ->
       to_complete: 0
     }
     ]
-    res.redirect '/faculty/flights'
+    res.redirect '/faculty/dashboard'
 
 # get a course for the teacher
 router.get '/:id', (req, res, next) ->

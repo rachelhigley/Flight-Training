@@ -21,6 +21,9 @@ module.exports = (callback) ->
       models.MissionStatus.bulkCreate mission_status_data
       .catch (err) ->
 
+      models.CommentType.bulkCreate comment_type_data
+      .catch (err) ->
+
       callback()
 
 user_type_data = [ {
@@ -39,14 +42,24 @@ mission_status_data = [ {
 },
 {
   id: 2
-  value: 'complete'
+  value: 'rejected'
 },
 {
   id: 3
-  value: 'accepted'
+  value: 'completed'
 },
 {
   id: 4
-  value: 'rejected'
+  value: 'accepted'
+}
+]
+
+comment_type_data = [ {
+  id: 1
+  value: 'submit link'
+},
+{
+  id: 2
+  value: 'comment'
 }
 ]

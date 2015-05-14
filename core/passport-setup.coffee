@@ -12,6 +12,7 @@ passport.deserializeUser (user, next) ->
   .then (user) ->
     next null, user
 
+
 passport.use new GitHubStrategy({
   clientID: 'fbc76b903d24aacd7585'
   clientSecret: 'f0bd0f04a12709dde50a1f67e14d8bceb8eefa24'

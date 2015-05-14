@@ -2,7 +2,7 @@ doctype html
 html
   head
     meta(charset='UTF-8')
-    title AdminLTE 2 | Dashboard
+    title Flight Training
     meta(content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no', name='viewport')
     //- Bootstrap 3.3.4
     link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css')
@@ -24,6 +24,16 @@ html
     //- if lt IE 9
       script(src='https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js')
       script(src='https://oss.maxcdn.com/respond/1.4.2/respond.min.js')
+
+    //- REQUIRED JS SCRIPTS
+    //- jQuery 2.1.4
+    script(src='//code.jquery.com/jquery-1.11.3.min.js')
+    //- Bootstrap 3.3.2 JS
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js')
+    //- AdminLTE App
+    script(src='/js/app.min.js', type='text/javascript')
+    script(src="/js/bootstrap3-wysihtml5.all.min.js")
+    script(src="/js/jquery-ui-1.10.3.min.js")
   body.skin-yellow.fixed
     .wrapper
       //- Main Header
@@ -40,115 +50,28 @@ html
         //- Header Navbar
         nav.navbar.navbar-static-top(role='navigation')
           //- Sidebar toggle button
-          a.sidebar-toggle(href='#', data-toggle='offcanvas', role='button')
+          a.sidebar-toggle.hidden-md.hidden-lg.hidden-sm(href='#', data-toggle='offcanvas', role='button')
             span.sr-only Toggle navigation
           //- Navbar Right Menu
           .navbar-custom-menu
             ul.nav.navbar-nav
-              //- Messages: style can be found in dropdown.less
-              li.dropdown.messages-menu
-                //- Menu toggle button
-                a.dropdown-toggle(href='#', data-toggle='dropdown')
-                  i.fa.fa-envelope-o
-                  span.label.label-success 4
-                ul.dropdown-menu
-                  li.header You have 4 messages
-                  li
-                    //- inner menu: contains the messages
-                    ul.menu
-                      li
-                        //- start message
-                        a(href='#')
-                          .pull-left
-                            //- User Image
-                            i.fa.fa-user
-                          //- Message title and timestamp
-                          h4
-                            | Support Team
-                            small
-                              i.fa.fa-clock-o
-                              |  5 mins
-                          //- The message
-                          p Why not buy a new awesome theme?
-                      //- end message
-                    //- /.menu
-                  li.footer
-                    a(href='#') See All Messages
-              //- /.messages-menu
-              //- Notifications Menu
-              li.dropdown.notifications-menu
-                //- Menu toggle button
-                a.dropdown-toggle(href='#', data-toggle='dropdown')
-                  i.fa.fa-bell-o
-                  span.label.label-warning 10
-                ul.dropdown-menu
-                  li.header You have 10 notifications
-                  li
-                    //- Inner Menu: contains the notifications
-                    ul.menu
-                      li
-                        //- start notification
-                        a(href='#')
-                          i.fa.fa-users.text-aqua
-                          |  5 new members joined today
-                      //- end notification
-                  li.footer
-                    a(href='#') View all
-              //- Tasks Menu
-              li.dropdown.tasks-menu
-                //- Menu Toggle Button
-                a.dropdown-toggle(href='#', data-toggle='dropdown')
-                  i.fa.fa-flag-o
-                  span.label.label-danger 9
-                ul.dropdown-menu
-                  li.header You have 9 tasks
-                  li
-                    //- Inner menu: contains the tasks
-                    ul.menu
-                      li
-                        //- Task item
-                        a(href='#')
-                          //- Task title and progress text
-                          h3
-                            | Design some buttons
-                            small.pull-right 20%
-                          //- The progress bar
-                          .progress.xs
-                            //- Change the css width attribute to simulate progress
-                            .progress-bar.progress-bar-aqua(style='width: 20%', role='progressbar', aria-valuenow='20', aria-valuemin='0', aria-valuemax='100')
-                              span.sr-only 20% Complete
-                      //- end task item
-                  li.footer
-                    a(href='#') View all tasks
-              //- User Account Menu
-              li.dropdown.user.user-menu
-                //- Menu Toggle Button
-                a.dropdown-toggle(href='#', data-toggle='dropdown')
-                  //- The user image in the navbar
-                  i.fa.fa-user
-                  //- hidden-xs hides the username on small devices so only the image appears.
-                  span.hidden-xs Alexander Pierce
-                ul.dropdown-menu
-                  //- The user image in the menu
-                  li.user-header
+              if user
+                //- User Account Menu
+                li
+                  a
+                    //- The user image in the navbar
                     i.fa.fa-user
-                    p
-                      | Alexander Pierce - Web Developer
-                      small Member since Nov. 2012
-                  //- Menu Body
-                  li.user-body
-                    .col-xs-4.text-center
-                      a(href='#') Followers
-                    .col-xs-4.text-center
-                      a(href='#') Sales
-                    .col-xs-4.text-center
-                      a(href='#') Friends
-                  //- Menu Footer
-                  li.user-footer
-                    .pull-left
-                      a.btn.btn-default.btn-flat(href='#') Profile
-                    .pull-right
-                      a.btn.btn-default.btn-flat(href='/auth/logout') Sign out
+                    //- hidden-xs hides the username on small devices so only the image appears.
+                    span.hidden-xs &nbsp;#{user.name}
+                li
+                  a(href='/auth/logout')
+                    i.fa.fa-sign-out
+                    span.hidden-xs &nbsp;Sign Out
+              else
+                li
+                  a(href='/auth/github')
+                    i.fa.fa-sign-out
+                    span.hidden-xs &nbsp;Sign In
 
       //- Left side column. contains the logo and sidebar
       aside.main-sidebar
@@ -163,14 +86,14 @@ html
                   a(href='#{type}/flights/#{course.id}')
                     i.fa.fa-link
                     span #{course.abbr}
-                if type === '/faculty'
-                  li
-                    a(href="/#{type}/flights/new")
-                      i.fa.fa-plus
-                      | Add New Flight
+            if type === '/faculty'
+              li
+                a(href="#{type}/flights/new")
+                  i.fa.fa-plus
+                  | Add New Flight
             if terms
               for term in terms
-                li
+                li(class="#{course && course.id === term.Course.id?'active':''}")
                   a(href='#{type}/flights/#{term.Course.id}')
                     i.fa.fa-link
                     span #{term.Course.abbr} - #{term.name}
@@ -187,53 +110,19 @@ html
           | Copyright © 2015 Flight Training.
         |  All rights reserved.
 
-    //- REQUIRED JS SCRIPTS
-    //- jQuery 2.1.4
-    script(src='//code.jquery.com/jquery-1.11.3.min.js')
-    //- Bootstrap 3.3.2 JS
-    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js')
-    //- AdminLTE App
-    script(src='/js/app.min.js', type='text/javascript')
-    script(src="/js/bootstrap3-wysihtml5.all.min.js")
-    script(src="/js/jquery-ui-1.10.3.min.js")
+    script.
+      (function(w, d){
+      var id='embedly-platform', n = 'script';
+      if (!d.getElementById(id)){
+      w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
+      var e = d.createElement(n); e.id = id; e.async=1;
+      e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
+      var s = d.getElementsByTagName(n)[0];
+      s.parentNode.insertBefore(e, s);
+      }
+      })(window, document);
+
     script(type='text/javascript').
         $(function () {
           $(".textarea").wysihtml5();
-          $( "#missions li:not(.active)" ).draggable({
-            appendTo: "body",
-            helper: "clone"
-          });
-          $( "#timeline li.timeline-item.open" ).droppable({
-            activeClass: "ui-state-default",
-            hoverClass: "ui-state-hover",
-            accept: ":not(.ui-sortable-helper)",
-            drop: function( event, ui ) {
-              var item = $(this)
-              id = ui.draggable.attr('mission-id')
-              item.find('.timeline-header').text(ui.draggable.text()).attr('mission-id',id);
-              item.find('.fa').removeClass('fa-circle-o').addClass('fa-circle');
-
-              $.ajax({
-                url: '/flights/mission',
-                method: 'POST',
-                data: {
-                  MissionId: id,
-                  MissionStatusId: 1
-                }
-              })
-            }
-          });
-
-          $('#timeline').on('click','.timeline-item .timeline-header .btn', function(event)
-            {
-              id = $(this).parent().attr('mission-id')
-              $.ajax({
-                url: '/flights/mission',
-                method: 'PUT',
-                data: {
-                  MissionId: id,
-                  MissionStatusId: 2
-                }
-              })
-            });
         });

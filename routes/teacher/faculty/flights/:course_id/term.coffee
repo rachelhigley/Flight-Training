@@ -27,7 +27,7 @@ router.get '/:term_id', (req, res, next) ->
     missions: (callback) ->
       models.StudentMission.findAll
         where:
-          MissionStatusId: 2
+          MissionStatusId: 3
         include: [
           {
             model: models.User
@@ -44,6 +44,11 @@ router.get '/:term_id', (req, res, next) ->
               model: models.Area
               where:
                 CourseId: req.course_id
+          },
+          {
+            model: models.Comment
+            include:
+              model: models.User
           }
         ]
       .then (missions) ->
@@ -52,16 +57,27 @@ router.get '/:term_id', (req, res, next) ->
     res.render 'faculty/term', result
 
 # update the mission
-router.get '/:term_id/mission/:mission_id/:status_id', (req, res, next) ->
+router.get '/:term_id/mission/:id/:status_id', (req, res, next) ->
   console.log req.params
   models.StudentMission.update
     MissionStatusId: req.params.status_id
   ,
     where:
-      MissionId: req.params.mission_id
+      id: req.params.id
   .then (data) ->
     console.log data
     res.redirect "/faculty/flights/#{req.course_id}/term/#{req.params.term_id}"
+
+# add comment to mission
+router.post '/:term_id/mission/:id/comment', (req, res, next) ->
+  models.Comment.create
+    text: req.body.text
+    UserId: req.user.id
+    StudentMissionId: req.params.id
+    CommentTypeId: 2
+  .then (data) ->
+    res.redirect "/faculty/flights/#{req.course_id}/term/#{req.params.term_id}"
+
 
 router.post '/:term_id/student', (req, res, next) ->
   models.Term.find req.params.term_id

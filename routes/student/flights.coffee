@@ -13,31 +13,34 @@ router.get '/:course_id', (req, res, next) ->
       models.Course.find
         where:
           id: req.params.course_id
-        include:[
-          {
+        include:
+          model: models.Level
+          include: [ {
             model: models.Area
-            include:[models.Mission,models.Level]
-          }
-          {
-            model: models.Level
-          }
-        ]
+            include:[models.Mission]
+            }
+          ]
 
       .then (course) ->
         callback null, course
-    missions: (callback) ->
-      models.StudentMission.findAll
-        include:[{
-            model: models.User
-            where:
-              id: req.user.id
-          },
-          {
-            model: models.Mission
-          }
-        ]
-      .then (missions) ->
-        callback null, missions
+    levels: (callback) ->
+      models.Level.findAll
+        include:
+          model: models.StudentMission
+          include: [{
+              model: models.User
+              where:
+                id: req.user.id
+            },
+            {
+              model: models.Comment
+              include: models.User
+            },
+            models.Mission
+          ]
+        order: [['id','ASC'],[models.StudentMission, 'MissionStatusId', 'DESC']]
+      .then (levels) ->
+        callback null, levels
   , (err, result) ->
     res.render 'students/flight', result
 
@@ -45,18 +48,26 @@ router.post '/mission', (req, res, next) ->
   req.body.UserId = req.user.id
   models.StudentMission.create req.body
   .then (data) ->
-    res.sendStatus 200
+    res.send
+      id: data.id
   .catch (err) ->
     res.sendStatus 200
 
 router.put '/mission', (req, res, next) ->
-  req.body.UserId = req.user.id
-  models.StudentMission.update req.body,
+  console.log req.body
+  req.body.StudentMission.UserId = req.body.Comment.UserId = req.user.id
+
+  models.StudentMission.update req.body.StudentMission,
     where:
-      MissionId: req.body.MissionId
+      id: req.body.StudentMission.id
       UserId: req.user.id
   .then (data) ->
     res.sendStatus 200
   .catch (err) ->
     res.sendStatus 200
+
+  models.Comment.create req.body.Comment
+  .catch (err) ->
+    console.log err
+
 module.exports = router

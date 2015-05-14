@@ -2,37 +2,33 @@ extends ../layout
 block content
   section.content-header
     h1 #{term.name}
-    ol.breadcrumb
-      li
-        a(href='/faculty/flights/')
-          i.fa.fa-dashboard
-          |  Flights
-      li
-        a(href="/faculty/flights/#{term.CourseId}")
-          | #{term.Course.abbr}
-      li.active #{term.name}
   //- Main content
   section.content
+    ul.timeline
+      li.time-label.locked
+        span.text-uppercase
+          | Pending Missions
+
+      for studentMission in missions
+        li.timeline-item.waiting
+          .timeline-item
+            i(href="/faculty/flights/#{term.CourseId}/term/#{term.id}/mission/#{studentMission.id}/4").fa
+            i(href="/faculty/flights/#{term.CourseId}/term/#{term.id}/mission/#{studentMission.id}/3").fa
+            h3.timeline-header #{studentMission.Mission.name}
+            .timeline-body
+              for comment in studentMission.Comments
+                if comment.CommentTypeId === 1
+                  a.embedly-card(href="#{comment.text}", data-card-width="100%")
+                else
+                  blockquote.embedly-card
+                    strong !{comment.User.name}:&nbsp;
+                    | !{comment.text}
+
+              form(action="/faculty/flights/#{term.CourseId}/term/#{term.id}/mission/#{studentMission.id}/comment",method="post").comment
+                h4 Add Comment
+                textarea.textarea(name="text", placeholder='Comment', style='width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;')
+                button.btn.btn-warning(type="submit") Send Comment
     .row
-      .col-md-6
-        .box
-          .box-header
-            h3.box-title Pending Missions
-          .box-body
-            #missions.box-group
-              for studentMission in missions
-                .panel.box
-                  h4.box-title
-                    a(data-toggle="collapse", data-parent="#missions",href="#mission-#{studentMission.Mission.id}")
-                      | #{studentMission.Mission.name}
-                    .btn-group.btn-group-xs.pull-right
-                      a(href="/faculty/flights/#{term.CourseId}/term/#{term.id}/mission/#{studentMission.MissionId}/4").btn.btn-danger Reject
-                      a(href="/faculty/flights/#{term.CourseId}/term/#{term.id}/mission/#{studentMission.MissionId}/3").btn.btn-success Accept
-
-                  .panel-collapse.collapse(id="mission-#{studentMission.Mission.id}")
-                    .box-body
-                      | !{studentMission.Mission.description}
-
       .col-md-6
         .box
           .box-header
@@ -54,3 +50,12 @@ block content
               .form-group
                 button.btn.btn-warning(type="submit") Add Student
 
+  script(type='text/javascript').
+    $(function () {
+      $("i[href]").on('click',function(){
+        var icon = $(this)
+        var link = icon.attr('href');
+        $.get(link);
+        icon.closest('li.timeline-item').remove();
+      });
+    });

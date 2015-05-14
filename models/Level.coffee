@@ -16,3 +16,6 @@ module.exports = (sequelize, DataTypes) ->
       Level.belongsToMany models.Area,
         through: 'LevelAreas'
         onDelete: 'cascade'
+
+      Level.hasMany models.StudentMission,
+        onDelete: 'cascade'
