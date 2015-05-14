@@ -1,0 +1,294 @@
+.timeline>li>.timeline-item.locked {
+  background-color: rgba(255,255,255,0.3);
+}
+
+li.ui-state-hover .timeline-item{
+  background-color: rgba(255,255,255,0.6);
+}
+
+.timeline-item .timeline-header .btn {
+  margin-top: -2px;
+}
+
+
+.missions ul {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 100%;
+  height: 100%;
+  width: auto;
+  white-space: nowrap;
+  transform: translateX(-100%);
+  background: #B44659;
+  transition: 0.5s transform;
+}
+
+.missions:hover ul {
+  transform: translateX(0);
+}
+
+.timeline:before {
+  left: 46px;
+  display: block;
+  content: '';
+}
+.time-label span {
+  min-width: 100px;
+  text-align: center;
+}
+.timeline>li.time-label.unlocked span{
+  background-color: #21C0B5;
+  color: #fff;
+}
+
+.timeline>li.time-label.unlocked:before {
+  border-color: #21C0B5;
+  height: 25px;
+}
+.timeline>li.time-label.locked span {
+  background-color: #d2d6de;
+  color: #000;
+}
+.timeline>li {
+  margin-bottom: 25px;
+  margin-right: 0;
+}
+.timeline>li:before {
+  display: block;
+  content: '';
+  border: 2px solid transparent;
+  width: 0px;
+  height: 0;
+  position: absolute;
+  top: -25px;
+  left: 46px;
+  transition: 0.5s all 0.5s;
+}
+
+.timeline li.timeline-item i.fa {
+  border-radius: 0;
+  width: 60px;
+  height: 60px;
+  margin-right: 20px;
+  float: left;
+  text-align: center;
+  color: #fff;
+}
+.timeline li.timeline-item i:before
+{
+  display: block;
+  font-size: 20px;
+  line-height: 2;
+}
+
+.timeline li.timeline-item i:after {
+  text-transform: uppercase;
+  font-size: 10px;
+  line-height: 1;
+  display: block;
+}
+
+.timeline .complete i {
+  background-color: #21C0B5;
+
+}
+.timeline .complete i:before {
+  content: "\f00c";
+}
+.timeline .complete i:after {
+  content: 'complete';
+}
+.timeline>li.complete:before {
+  border-color: #21C0B5;
+  height: 25px;
+}
+
+.timeline .pending i {
+  background-color: #83CAC3;
+}
+.timeline .pending i:before {
+  content: "\f017";
+}
+.timeline .pending i:after {
+  content: 'pending';
+}
+.timeline>li.pending:before {
+  border-color: #83CAC3;
+  height: 25px;
+}
+
+.timeline .resubmit i {
+  background-color: #CF850F;
+  cursor: pointer;
+}
+.timeline .resubmit i:before {
+  content: "\f01e";
+}
+.timeline .resubmit i:after {
+  content: 'resubmit';
+}
+.timeline>li.resubmit:before {
+  border-color: #CF850F;
+  height: 25px;
+}
+
+.timeline .submit i {
+  background-color: #F39C12;
+  cursor: pointer;
+}
+.timeline .submit i:before {
+  content: "\f111";
+}
+.timeline .submit i:after {
+  content: 'submit';
+}
+
+.select i {
+  background-color: #F3C070;
+}
+.select i:before {
+  content: "\f10c";
+}
+.select i:after {
+  content: 'select';
+}
+
+.timeline-item.select .timeline-item, .timeline-item.locked .timeline-item{
+  background-color: #F2F5F7;
+  font-style: italic;
+}
+
+.timeline .locked i {
+  background-color: #888;
+}
+.timeline .locked i:before {
+  content: "\f023";
+}
+.timeline .locked i:after {
+  content: 'locked';
+}
+
+.select .submit i:after {
+  content: 'select';
+}
+
+.timeline li.timeline-item.waiting i:first-child {
+  background-color: #21C0B5;
+  margin-right: 0;
+}
+.timeline .waiting i:first-child:before {
+  content: "\f00c";
+}
+.timeline .waiting i:first-child:after {
+  content: 'Accept';
+}
+
+.timeline .waiting i {
+  background-color: #CF850F;
+}
+.timeline .waiting i:before {
+  content: "\f01e";
+}
+.timeline .waiting i:after {
+  content: 'Reject';
+}
+
+.timeline .add i {
+  background-color: #21C0B5;
+  cursor: pointer;
+}
+.timeline .add i:before {
+  content: "\f067";
+}
+.timeline .add i:after {
+  content: 'Add';
+}
+
+.timeline .remove i {
+  background-color: #CF850F;
+  cursor: pointer;
+}
+.timeline .remove i:before {
+  content: "\f00d";
+}
+.timeline .remove i:after {
+  content: 'Delete';
+}
+
+li.timeline-item .timeline-item
+{
+  margin-left: 18px;
+  margin-right: 1px;
+}
+.timeline>li>.timeline-item>.timeline-header {
+  padding: 21px 75px;
+}
+
+.timeline .list-group-item {
+  padding: 0;
+}
+.timeline .list-group-item .list-group-item-text {
+  padding: 10px;
+}
+.timeline .list-group-item.submit {
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.timeline .list-group-item.submit h4 {
+  line-height: 40px;}
+
+li.selected .timeline-item {
+    margin-left: -60px;
+    /* float: left; */
+}
+.timeline-item {
+  transition: 0.5s right;
+  right: 0;
+}
+.timeline-item.selected {
+    right: -100%;
+
+}
+
+.timeline-item.selected input {
+  position: absolute;
+  left: -100%;
+  margin-left: 60px;
+  height: 61px;
+  width: 100%;
+  padding: 20px;
+  font-size: 20px;
+  transition: 0.5s width;
+}
+.timeline-item input {
+  width: 0;
+}
+
+.timeline-item form input{
+  width: 100%;
+}
+
+.timeline>li>.timeline-item>.timeline-body {
+  padding: 0 10px;
+  min-height: 0;
+  transition: 0.5s height;
+  overflow: hidden;
+}
+.embedly-card {
+  margin: 10px 0;
+}
+
+.comment {
+  margin: 10px 0;
+}
+
+.textarea {
+  width: 100%;
+  height: 200px;
+  font-size: 14px;
+  line-height: 18px;
+  border: 1px solid #dddddd;
+  padding: 10px;
+}
