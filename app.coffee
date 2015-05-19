@@ -48,22 +48,22 @@ app.use (req, res, next) ->
   app.locals.user = req.user
   if req.user
     models = appRequire('models')
-    if req.user.UserTypeId is 2
-      include = models.Course
-    else
-      include =
-        model: models.Term
-        include: models.Course
     models.User.find
       where:
         id: req.user.id
-      include: include
+      include: [{
+          model: models.Course
+          as: 'Students'
+        },
+        {
+          model: models.Course
+          as: 'Teachers'
+        }
+      ]
     .then (user) ->
-      if req.user.UserTypeId is 2
-        app.locals.courses = user.Courses
-      else
-        app.locals.terms = user.Terms
-      app.locals.type = if user.UserTypeId is 2 then '/faculty' else ''
+      app.locals.courses = user.Teachers
+      app.locals.flights = user.Students
+      app.locals.type = if user.UserTypeId is 2 then 'faculty' else ''
       next()
   else
     next()

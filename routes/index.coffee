@@ -8,7 +8,7 @@ loadFile = (files, dir, level, app) ->
       name = file.split('.')[0]
       route = dir.replace(level+'/', '')
       restricted = restrict level, route
-      include = './' + dir + '/' +name
+      include = './' + dir+name
       url = '/'+ route + if name is 'index' then '' else name
       app.use url, restricted , require include
     else

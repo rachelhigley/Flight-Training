@@ -2,11 +2,8 @@ express = require('express')
 router  = express.Router()
 models  = appRequire('models')
 router.get '/', (req, res, next) ->
-  models.User.find
-    where:
-      github_id: req.user.github_id
-    include: [{ all: true, nested: true }]
+  models.User.find req.user.id
   .then (user) ->
-    res.render 'index'
+    res.render 'faculty/dashboard'
 
 module.exports = router

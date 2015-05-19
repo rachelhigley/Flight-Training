@@ -7,4 +7,5 @@ module.exports = (sequelize, DataTypes) ->
 
   , classMethods:
     associate: (models) ->
-      UserType.hasMany models.User
+      UserType.hasMany models.User,
+        onDelete: 'cascade'

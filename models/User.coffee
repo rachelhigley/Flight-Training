@@ -12,17 +12,24 @@ module.exports = (sequelize, DataTypes) ->
 
   , classMethods:
     associate: (models) ->
-      User.belongsTo models.UserType
-      User.belongsToMany models.Course,
-        through: 'Teachers'
+      User.belongsTo models.UserType,
         onDelete: 'cascade'
 
-      User.belongsToMany models.Term,
-        through: 'Month'
+      User.belongsToMany models.Course,
+        through: 'Teachers'
+        as: 'Teachers'
+        onDelete: 'cascade'
+
+      User.belongsToMany models.Course,
+        through: 'Students'
+        as: 'Students'
         onDelete: 'cascade'
 
       User.hasMany models.StudentMission,
         onDelete: 'cascade'
 
       User.hasMany models.Comment,
+        onDelete: 'cascade'
+
+      User.hasMany models.StudentLevel,
         onDelete: 'cascade'

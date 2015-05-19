@@ -2,90 +2,86 @@ express = require('express')
 router  = express.Router()
 models  = appRequire('models')
 
+router.param 'course_abbr',(req, res, next, abbr) ->
+
+  models.Course.find
+    where:
+      abbr: abbr
+  .then (course) ->
+    req.course_id = course.id
+    next()
+
+# route for craeting a course
 router.get '/new', (req, res, next) ->
   res.render 'faculty/new'
 
-# create a course with it's levels
+# create a course
 router.post '/', (req, res,next) ->
   models.Course.create req.body
   .then (course) ->
-    course.addUser req.user.id
+    course.addTeacher req.user.id
+
     models.Level.bulkCreate [{
-      CourseId: course.id
-      name: 'takeoff'
-      to_complete: 0
-    },
-    {
-      CourseId: course.id
-      name: 'climb'
-      to_complete: 0
-    },
-    {
-      CourseId: course.id
-      name: 'cruise'
-      to_complete: 0
-    },
-    {
-      CourseId: course.id
-      name: 'descent'
-      to_complete: 0
-    },
-    {
-      CourseId: course.id
-      name: 'landing'
-      to_complete: 0
-    }
-    ]
+        CourseId: course.id
+        name: 'Takeoff'
+        to_complete: 5
+      },
+      {
+        CourseId: course.id
+        name: 'Climb'
+        to_complete: 5
+      },
+      {
+        CourseId: course.id
+        name: 'Cruise'
+        to_complete: 5
+      },
+      {
+        CourseId: course.id
+        name: 'Descent'
+        to_complete: 5
+      },
+      {
+        CourseId: course.id
+        name: 'Landing'
+        to_complete: 1
+      }
+      ]
+
     res.redirect '/faculty/dashboard'
 
 # get a course for the teacher
-router.get '/:id', (req, res, next) ->
-  async = require 'async'
-  async.parallel
-    course: (callback) ->
-      models.Course.find req.params.id,
-        include: [models.Level, models.Term, models.User,
+router.get '/:course_abbr', (req, res, next) ->
+
+  models.Course.find req.course_id,
+    include:
+      model: models.User
+      as: 'Students'
+      include:[models.StudentLevel, {
+        model: models.StudentMission
+        include:[models.Mission,
           {
-            model: models.Area
-            include: models.Mission
+            model: models.Comment
+            include: models.User
           }
         ]
+      }]
+  .then (course) ->
+    res.render 'faculty/flight', course: course
 
-        order: [[models.Level, 'id', 'ASC']]
-      .then (course) ->
-        callback null, course
-    users: (callback) ->
-      models.User.findAll
-        where:
-          UserTypeId: 2
-      .then (users) ->
-        callback null, users
-  , (err, result) ->
-    res.render 'faculty/flight', result
-
-# save the missions to complete
-router.post '/:course_id/level/:id', (req, res, next) ->
-  models.Level.update req.body,
+# view the course missions
+router.get '/:abbr/settings', (req, res, next) ->
+  models.Course.find
     where:
-      id: req.params.id
-  .then () ->
-    res.redirect '/faculty/flights/'+req.params.course_id
-
-# add the area to the level
-router.post '/:course_id/area', (req, res, next) ->
-  models.Area.create
-    name: req.body.name
-    CourseId: req.params.course_id
-  .then (area) ->
-    for level in req.body['levels[]']
-      area.addLevel level
-
-    res.redirect '/faculty/flights/'+req.params.course_id
-
-# add mission to the area
-router.post '/:course_id/mission', (req, res, next) ->
-  models.Mission.create req.body
-  .then () ->
-    res.redirect '/faculty/flights/'+req.params.course_id
+      abbr: req.params.abbr
+    include: [models.Level, {
+      model: models.Area
+      include:
+        model: models.Mission
+        order: ['id','ASC']
+      }]
+    order: [[models.Level, 'id','ASC'], [models.Area, models.Mission, 'id','ASC']]
+  .then (course) ->
+    res.render 'faculty/settings.jade', course: course
 
 module.exports = router

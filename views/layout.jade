@@ -80,25 +80,24 @@ html
           //- Sidebar Menu
           ul.sidebar-menu
             li.header Flights
-            if courses
-              for course in courses
-                li
-                  a(href='#{type}/flights/#{course.id}')
+            if flights
+              for navItem in flights
+                li(class="#{course && course.abbr === navItem.abbr?'active':''}")
+                  a(href='/flights/#{navItem.abbr}')
                     i.fa.fa-link
-                    span #{course.abbr}
-            if type === '/faculty'
+                    span #{navItem.abbr}
+            if courses
+              li.header Faculty - Flights
+              for navItem in courses
+                li(class="#{course && course.abbr === navItem.abbr?'active':''}")
+                  a(href='/faculty/flights/#{navItem.abbr}')
+                    i.fa.fa-link
+                    span #{navItem.abbr}
+            if type === 'faculty'
               li
                 a(href="#{type}/flights/new")
                   i.fa.fa-plus
                   | Add New Flight
-            if terms
-              for term in terms
-                li(class="#{course && course.id === term.Course.id?'active':''}")
-                  a(href='#{type}/flights/#{term.Course.id}')
-                    i.fa.fa-link
-                    span #{term.Course.abbr} - #{term.name}
-
-
       //- Content Wrapper. Contains page content
       .content-wrapper
         block content

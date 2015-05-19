@@ -19,3 +19,6 @@ module.exports = (sequelize, DataTypes) ->
 
       Level.hasMany models.StudentMission,
         onDelete: 'cascade'
+
+      Level.hasOne models.StudentLevel,
+        onDelete: 'cascade'

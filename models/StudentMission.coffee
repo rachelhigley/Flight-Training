@@ -3,8 +3,13 @@ module.exports = (sequelize, DataTypes) ->
   StudentMission = sequelize.define 'StudentMission', {}
   , classMethods:
     associate: (models) ->
-      StudentMission.belongsTo models.User
-      StudentMission.belongsTo models.Mission
-      StudentMission.belongsTo models.MissionStatus
-      StudentMission.belongsTo models.Level
-      StudentMission.hasMany models.Comment
+      StudentMission.belongsTo models.User,
+        onDelete: 'cascade'
+      StudentMission.belongsTo models.Mission,
+        onDelete: 'cascade'
+      StudentMission.belongsTo models.MissionStatus,
+        onDelete: 'cascade'
+      StudentMission.belongsTo models.Level,
+        onDelete: 'cascade'
+      StudentMission.hasMany models.Comment,
+        onDelete: 'cascade'

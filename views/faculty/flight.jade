@@ -1,124 +1,82 @@
 extends ../layout
 
 block content
-  section.content-header
-    h1 #{course.name}
-    ol.breadcrumb
-      li
-        a(href='#')
-          i.fa.fa-dashboard
-          |  Flights
-      li.active #{course.abbr}
+  section.content-header.oh
+    h1.pull-left
+      | #{course.name}&nbsp;&nbsp;
+      a.text-yellow(href="/faculty/flights/#{course.abbr}/settings")
+        i.fa.fa-pencil
+
   //- Main content
   section.content
-    .row
-      .col-md-6
-        ul.timeline
-          li.timeline-item.add
-            .timeline-item
-              i.fa
-              h3.timeline-header New Mission
-              .timeline-body
-                form(action="#{course.id}/mission",method="POST")
-                  .form-group
-                    label(for="area") Area
-                    select.form-control#area(name="AreaId")
-                      for area in course.Areas
-                        option.text-uppercase(value="#{area.id}") #{area.name}
-                  .form-group
-                    label(for="name") Name
-                    input.form-control(type="text", id="name", name="name")
+    ul.timeline
+      li.time-label.locked
+        span.text-uppercase
+          | Students
+      if course.Students.length === 0
+        li.timeline-item.locked
+          i.fa
+          .timeline-item
+            h3.timeline-header No Students
+      for student in course.Students
+        li.timeline-item
+          i.fa.fa-user
+          .timeline-item
+            h3.timeline-header
+              | #{student.name}
+              //- a.pull-right(href="/faculty/student/#{student.id}") View Progress
+            .timeline-body
+              h4 Pending Missions
+              .list-group
+                - var missions = 0; var completed = 0;
+                for level in student.StudentLevels
+                  - missions += level.to_complete
+                for studentMission in student.StudentMissions
+                  if studentMission.MissionStatusId === 4
+                    - completed++
+                  if studentMission.MissionStatusId === 3
+                    .list-group-item.add.margin-top(mission-id="#{studentMission.Mission.id}")
+                      .list-group-item-heading.oh
+                        h4.pull-left
+                          | #{studentMission.Mission.name}
+                        .pull-right
+                          a.btn.btn-reject(href="/faculty/flights/#{course.abbr}/mission/#{studentMission.id}/2") Reject
+                          | &nbsp;
+                          a.btn.btn-warning(href="/faculty/flights/#{course.abbr}/mission/#{studentMission.id}/4") Accept
+                      .list-group-item-text
+                        for comment in studentMission.Comments
+                          include ../common/comment
+                        form(action="/faculty/flights/#{course.abbr}/mission/#{studentMission.id}/comment",method="post").comment
+                          h4 Add Comment
+                          textarea.textarea(name="text", placeholder='Comment', style='width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;')
+                          button.btn.btn-warning.timeline-btn.btn-block(type="submit") Send Comment
+              h4 Progress
+              .progress
+                .progress-bar(style="width:#{completed/missions*100}%")
+                  | #{completed} / #{missions}
 
-                  textarea.textarea(name="description", placeholder='Description')
+  #newTerm.modal.fade(role="dialog")
+    .modal-dialog
+      form.modal-content(action="#{course.abbr}/term", method="POST")
+        .modal-header
+          button.close(type="button",data-dismiss="model")
+            i.fa.fa-times
+          h4.modal-title
+            | New Term
+        .modal-body
+          .form-group
+            label(for="name") Name
+            input.form-control(type="text", id="name", name="name")
 
-                  .form-group
-                    button.btn.btn-warning(type="submit") Create Mission
+        .modal-footer
+          button.btn.btn-warning(type="submit") Create Term
 
-          for area in course.Areas
-            li.time-label.locked
-              span.text-uppercase
-                | #{area.name}
-            for mission in area.Missions
-              li.timeline-item.remove
-                .timeline-item
-                  i.fa
-                  h3.timeline-header #{mission.name}
-                  .timeline-body
-                    form(action="#{course.id}/mission/#{mission.id}",method="POST")
-                      textarea.textarea(name="description", placeholder='Description') !{mission.description}
-                      .form-group
-                        button.btn.btn-warning(type="submit")
-                          | Update Mission
-      .col-md-6
-        .box
-          .box-header.with-border
-            h3.box-title Terms
-          .box-body.no-padding
-            ul.nav.nav-pills.nav-stacked
-              for term in course.Terms
-                li
-                  a(href="/faculty/flights/#{course.id}/term/#{term.id}")
-                    | #{term.name}
-                    i.fa.fa-chevron-right.pull-right
-          .box-footer
-            form(action="#{course.id}/term", method="POST")
-              label(for="name") New Term Name
-              .input-group
-                input.form-control(type="text", id="name", name="name")
-                span.input-group-btn
-                  button.btn.btn-warning(type="submit") Create Term
-        .box.box-warning
-          .box-header
-            h3.box-title Levels
-          .box-body.table-responsive
-            table.table
-              tr
-                td(width="50%") Name
-                td Mission to complete the Level
-              for level in course.Levels
-                tr
-                  form(action="#{course.id}/level/#{level.id}",method="POST")
-                    td.text-uppercase #{level.name}
-                    td
-                      .input-group
-                        input.form-control(type="text", id="#{level.name}-toComplete",name="to_complete",value="#{level.to_complete}")
-                        span.input-group-btn
-                          button.btn.btn-warning(type="submit") Save
-        .box
-          .box-header
-            h3.box-title New Area
-          .box-body
-            form(action="#{course.id}/area",method="POST")
-              label Include in Levels:
-              .form-group
-                for level in course.Levels
-                  .checkbox
-                    label.text-uppercase(for="level-#{level.id}")
-                      input(id="level-#{level.id}", type="checkbox", name="levels[]",value="#{level.id}")
-                      | #{level.name}
-              .form-group
-                label(for="name") Name
-                input.form-control(type="text", id="name", name="name")
-
-              .form-group
-                button.btn.btn-warning(type="submit") Create Area
-
-        .box
-          .box-header
-            h3.box-title Teachers
-          .box-body.no-padding
-            ul.nav.nav-pills.nav-stacked
-              for teacher in course.Users
-                li
-                  a #{teacher.name}
-          .box-footer
-            form(action="#{course.id}/teacher",method="POST")
-              .form-group
-                label(for="teacher") New teacher
-                select.form-control#teacher(name="UserId")
-                  option Select One
-                  for teacher in users
-                    option(value="#{teacher.id}") #{teacher.name}
-              .form-group
-                button.btn.btn-warning(type="submit") Add Teacher
-
+  script(type='text/javascript').
+    $(function () {
+      $("i[href]").on('click',function(){
+        var icon = $(this)
+        var link = icon.attr('href');
+        $.get(link);
+        icon.closest('li.timeline-item').remove();
+      });
+    });

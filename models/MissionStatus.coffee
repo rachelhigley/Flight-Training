@@ -7,4 +7,5 @@ module.exports = (sequelize, DataTypes) ->
 
   , classMethods:
     associate: (models) ->
-      MissionStatus.hasMany models.StudentMission
+      MissionStatus.hasMany models.StudentMission,
+        onDelete: 'cascade'

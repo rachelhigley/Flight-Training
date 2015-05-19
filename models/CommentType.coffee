@@ -7,4 +7,5 @@ module.exports = (sequelize, DataTypes) ->
 
   , classMethods:
     associate: (models) ->
-      CommentType.hasMany models.Comment
+      CommentType.hasMany models.Comment,
+        onDelete: 'cascade'

@@ -5,22 +5,20 @@ models  = appRequire('models')
 router.get '/', (req, res, next) ->
   res.render 'students/welcome'
 
-router.get '/:course_id', (req, res, next) ->
+router.get '/:course_abbr', (req, res, next) ->
   async = require 'async'
 
   async.parallel
     course: (callback) ->
       models.Course.find
         where:
-          id: req.params.course_id
+          abbr: req.params.course_abbr
         include:
           model: models.Level
-          include: [ {
+          include: [models.StudentLevel, {
             model: models.Area
-            include:[models.Mission]
-            }
-          ]
-
+            include: models.Mission
+          }]
       .then (course) ->
         callback null, course
     levels: (callback) ->
@@ -44,6 +42,23 @@ router.get '/:course_id', (req, res, next) ->
   , (err, result) ->
     res.render 'students/flight', result
 
+router.get '/:course_abbr/join', (req, res, next) ->
+  models.Course.find
+    where:
+      abbr: req.params.course_abbr
+    include: models.Level
+  .then (course) ->
+    course.addStudent req.user.id
+    studentLevels = []
+    for level in course.Levels
+      studentLevels.push
+        LevelId: level.id
+        UserId: req.user.id
+        to_complete: level.to_complete
+
+    models.StudentLevel.bulkCreate studentLevels
+    res.redirect "/flights/#{req.params.course_abbr}"
+
 router.post '/mission', (req, res, next) ->
   req.body.UserId = req.user.id
   models.StudentMission.create req.body
@@ -54,13 +69,11 @@ router.post '/mission', (req, res, next) ->
     res.sendStatus 200
 
 router.put '/mission', (req, res, next) ->
-  console.log req.body
-  req.body.StudentMission.UserId = req.body.Comment.UserId = req.user.id
+  req.body.Comment.UserId = req.user.id
 
   models.StudentMission.update req.body.StudentMission,
     where:
       id: req.body.StudentMission.id
-      UserId: req.user.id
   .then (data) ->
     res.sendStatus 200
   .catch (err) ->

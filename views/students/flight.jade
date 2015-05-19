@@ -3,92 +3,97 @@ extends ../layout
 block content
   //- Main content
   section.content
-    .row
-      .col-md-12
-        ul.timeline#timeline
-          - var previous_index = false;
-          each level, index in course.Levels
+    if !course.Levels[0].StudentLevel
+      h3 #{course.name}
+      p You aren't currently particiaping in this flight.
+      a.btn.btn-block.btn-warning(href="/flights/#{course.abbr}/join") Start your Training
+    else
+      .row
+        .col-md-12
+          ul.timeline#timeline
+            - var previous_index = false;
+            each level, index in course.Levels
 
-            li.time-label(class="#{previous_index !== false && lockedItems != course.Levels[previous_index].to_complete?'locked':'unlocked'}")
-              span.text-uppercase
-                | #{level.name}
-            - if(previous_index !== false && lockedItems != course.Levels[previous_index].to_complete) {
-              li.timeline-item.locked
-                i.fa
-                .timeline-item
-                  h3.timeline-header Complete missions in previous levels to unlock this one
-            -} else {
-
-            - lockedItems = 0; previous_index = index;
-            - for (var i = 0; i < level.to_complete; ++i) {
-
-             if !levels[index] || !levels[index].StudentMissions[i]
-                li.timeline-item.select(data-toggle="collapse", href="#mission-#{j}",level-id="#{level.id}")
+              li.time-label(class="#{previous_index !== false && lockedItems != course.Levels[previous_index].to_complete?'locked':'unlocked'}")
+                span.text-uppercase
+                  | #{level.name}
+              - if(previous_index !== false && lockedItems != course.Levels[previous_index].to_complete) {
+                li.timeline-item.locked
                   i.fa
                   .timeline-item
-                    h3.timeline-header Select Mission
-                    .timeline-body.collapse(id="mission-#{j}")
-                        for area in level.Areas
-                          h4 #{area.name}
-                          .list-group
-                            for mission in area.Missions
-                              .list-group-item.submit(mission-id="#{mission.id}")
-                                i.fa
-                                h4
-                                  | #{mission.name}
-                              .list-group-item
-                                .list-group-item-text
-                                  blockquote.embedly-card
-                                    | !{mission.description}
+                    h3.timeline-header Complete missions in previous levels to unlock this one
 
-              else
-                if levels[index].StudentMissions[i].MissionStatusId === 1
-                  li.timeline-item.submit(mission-id="#{levels[index].StudentMissions[i].id}")
-                    i.fa
-                    .timeline-item
-                      h3.timeline-header
-                        | #{levels[index].StudentMissions[i].Mission.name}
-                      .timeline-body
-                        blockquote.embedly-card
-                          | !{levels[index].StudentMissions[i].Mission.description}
-                else if levels[index].StudentMissions[i].MissionStatusId === 2
-                  - lockedItems++
-                  li.timeline-item.resubmit(mission-id="#{levels[index].StudentMissions[i].id}")
-                    i.fa
-                    .timeline-item
-                      h3.timeline-header
-                        | #{levels[index].StudentMissions[i].Mission.name}
-                      .timeline-body
-                        for comment in levels[index].StudentMissions[i].Comments
-                          include ../common/comment
-                else if levels[index].StudentMissions[i].MissionStatusId === 3
-                  - lockedItems++
-                  li.timeline-item.pending
-                    i.fa
-                    .timeline-item
-                      h3.timeline-header #{levels[index].StudentMissions[i].Mission.name}
-                      .timeline-body
-                        for comment in levels[index].StudentMissions[i].Comments
-                          include ../common/comment
-                else if levels[index].StudentMissions[i].MissionStatusId === 4
-                  - lockedItems++
-                  li.timeline-item.complete
-                    i.fa
-                    .timeline-item
-                      h3.timeline-header #{levels[index].StudentMissions[i].Mission.name}
-                      .timeline-body
-                        for comment in levels[index].StudentMissions[i].Comments
-                          if comment.CommentTypeId !== 1
-                            blockquote.embedly-card
-                              strong !{comment.User.name}:&nbsp;
-                              !{comment.text}
+              -} else {
 
-            - } }
+              - lockedItems = 0; previous_index = index;
+              - for (var i = 0; i < level.StudentLevel.to_complete; ++i) {
+
+               if !levels[index] || !levels[index].StudentMissions[i]
+                  li.timeline-item.select(data-toggle="collapse", href="#mission-#{i}",level-id="#{level.id}")
+                    i.fa
+                    .timeline-item
+                      .timeline-body.collapse(id="mission-#{i}")
+                          for area in level.Areas
+                            h4 #{area.name}
+                            .list-group
+                              for mission in area.Missions
+                                .list-group-item.submit(mission-id="#{mission.id}")
+                                  h4.list-group-heading
+                                    | #{mission.name}
+                                  .list-group-item-text
+                                    blockquote.embedly-card
+                                      | !{mission.description}
+                                  .btn.btn-block.timeline-btn
+                      .btn.btn-block.timeline-btn
+                else
+                  if levels[index].StudentMissions[i].MissionStatusId === 1
+                    li.timeline-item.submit(mission-id="#{levels[index].StudentMissions[i].id}")
+                      i.fa
+                      .timeline-item
+                        h3.timeline-header
+                          | #{levels[index].StudentMissions[i].Mission.name}
+                        .timeline-body
+                          blockquote.embedly-card
+                            | !{levels[index].StudentMissions[i].Mission.description}
+                        .btn.btn-block.timeline-btn
+                  else if levels[index].StudentMissions[i].MissionStatusId === 2
+                    - lockedItems++
+                    li.timeline-item.resubmit(mission-id="#{levels[index].StudentMissions[i].id}")
+                      i.fa
+                      .timeline-item
+                        h3.timeline-header
+                          | #{levels[index].StudentMissions[i].Mission.name}
+                        .timeline-body
+                          for comment in levels[index].StudentMissions[i].Comments
+                            include ../common/comment
+                        .btn.btn-block.timeline-btn
+                  else if levels[index].StudentMissions[i].MissionStatusId === 3
+                    - lockedItems++
+                    li.timeline-item.pending
+                      i.fa
+                      .timeline-item
+                        h3.timeline-header #{levels[index].StudentMissions[i].Mission.name}
+                        .timeline-body
+                          for comment in levels[index].StudentMissions[i].Comments
+                            include ../common/comment
+                  else if levels[index].StudentMissions[i].MissionStatusId === 4
+                    - lockedItems++
+                    li.timeline-item.complete
+                      i.fa
+                      .timeline-item
+                        h3.timeline-header #{levels[index].StudentMissions[i].Mission.name}
+                        .timeline-body
+                          for comment in levels[index].StudentMissions[i].Comments
+                            if comment.CommentTypeId !== 1
+                              blockquote.embedly-card
+                                strong !{comment.User.name}:&nbsp;
+                                | !{comment.text}
+              - } }
 
   script(type='text/javascript').
     $(function () {
-      $('#timeline').on('click','.list-group-item.submit', function(event) {
-          var mission = $(this);
+      $('#timeline').on('click','.list-group-item .btn', function(event) {
+          var mission = $(this).parent();
           var mission_id = mission.attr('mission-id');
           var item = mission.closest('.timeline-item');
           var level_id = item.parent().attr('level-id');
@@ -103,22 +108,24 @@ block content
               success: function(data)
               {
                 item.parent().attr('data-toggle','').attr('href','').removeClass('select').addClass('submit').attr('mission-id',data.id);
-                item.find('.timeline-header').text(mission.text());
-                mission_descr = mission.next().html();
+                item.prepend('<div class="timeline-header"></div>').find('.timeline-header').text(mission.find('.list-group-heading').text());
+                mission_descr = mission.find('.list-group-item-text').html();
                 item.find('.timeline-body').addClass('in').attr('style','').html(mission_descr);
               }
             })
         })
 
-        $('#timeline').on('click','.timeline-item[class*="submit"] i', function(event)
+        $('#timeline').on('click','.timeline-item[class*="submit"] .btn', function(event)
           {
 
             var item = $(this).closest('li.timeline-item');
             var body = item.find('.timeline-body')
             if(!item.hasClass('selected'))
             {
-              item.prepend('<input type="text" placeholder="submittion link" />');
-              item.addClass('selected');
+              item.prepend('<input type="text" class="submit-link" placeholder="submittion link" />')
+              setTimeout(function() {
+                item.addClass('selected');
+              });
               body.html('');
             }
             else
@@ -142,7 +149,7 @@ block content
                 contentType: "application/json",
                 data:  JSON.stringify(data),
                 success: function(){
-                  item.addClass('pending').removeClass('submit').removeClass('selected').find('input').remove();
+                  item.addClass('pending').removeClass('submit').removeClass('resubmit').removeClass('selected').find('input').remove();
                   body.append('<a class="embedly-card" data-card-width="100%" href="'+link+'">')
 
                 }

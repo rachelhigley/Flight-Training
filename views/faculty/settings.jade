@@ -1,0 +1,85 @@
+extends ../layout
+block content
+  section.content-header
+    h1
+     | #{course.name}&nbsp;&nbsp;
+     i.fa.fa-gear.text-yellow(data-toggle="modal", data-target="#settings")
+  //- Main content
+  section.content
+    ul.timeline
+      li.time-label.locked
+        span.text-uppercase
+          | Missions
+      li.timeline-item.add(data-toggle="collapse", href="#newArea")
+        i.fa
+        form(action="area",method="POST").timeline-item
+          .timeline-body.collapse(id="newArea")
+            h4 New Area
+            label Include in Levels:
+            .form-group
+              for level in course.Levels
+                .checkbox
+                  label.text-uppercase(for="level-#{level.id}")
+                    input(id="level-#{level.id}", type="checkbox", name="levels[]",value="#{level.id}")
+                    | #{level.name}
+            .form-group
+              label(for="name") Name
+              input.form-control(type="text", id="name", name="name")
+
+          button.btn.btn-block.timeline-btn(type="submit") Create Area
+      li.timeline-item.add(data-toggle="collapse", href="#newMission")
+        i.fa
+        form(action="mission",method="POST").timeline-item
+          .timeline-body.collapse(id="newMission")
+            h4 New Mission
+            .form-group
+              label(for="area") Area
+              select.form-control#area(name="AreaId")
+                for area in course.Areas
+                  option.text-uppercase(value="#{area.id}") #{area.name}
+            .form-group
+              label(for="name") Name
+              input.form-control(type="text", id="name", name="name")
+
+            textarea.textarea(name="description", placeholder='Description')
+          button.btn.btn-block.timeline-btn(type="submit") Create Mission
+
+      for area in course.Areas
+        li.time-label.locked
+          span.text-uppercase
+            | #{area.name}
+        for mission in area.Missions
+          li.timeline-item.update
+            i.fa
+            form(action="mission/#{mission.id}",method="POST").timeline-item
+              h3.timeline-header
+                | #{mission.name}
+                a.pull-right.fa.fa-trash(href="#{course.abbr}/mission/#{mission.id}/remove")
+              .timeline-body
+                  textarea.textarea(name="description", placeholder='Description') !{mission.description}
+              button.btn.btn-warning.btn-block.timeline-btn(type="submit")
+                | Update Mission
+
+  #settings.modal.fade(role="dialog")
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close(type="button",data-dismiss="model")
+            i.fa.fa-times
+          h4.modal-title
+            | Settings
+        .modal-body
+          h3 Levels
+          table.table
+            tr
+              td(width="50%") Name
+              td Mission to complete the Level
+            for level in course.Levels
+              tr
+                form(action="level/#{level.id}",method="POST")
+                  td.text-uppercase #{level.name}
+                  td
+                    .input-group
+                      input.form-control(type="text", id="#{level.name}-toComplete",name="to_complete",value="#{level.to_complete}")
+                      span.input-group-btn
+                        button.btn.btn-warning(type="submit") Save
