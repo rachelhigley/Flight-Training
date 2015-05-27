@@ -52,7 +52,7 @@ router.post '/', (req, res,next) ->
 
 # get a course for the teacher
 router.get '/:course_abbr', (req, res, next) ->
-  console.log req.course_id
+
   models.Course.find req.course_id,
     include:
       model: models.User
@@ -80,6 +80,7 @@ router.get '/:course_abbr', (req, res, next) ->
         ]
       }]
   .then (course) ->
+    console.log course
     res.render 'faculty/flight', course: course
 
 # view the course missions
