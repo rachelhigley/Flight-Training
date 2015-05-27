@@ -52,7 +52,7 @@ router.post '/', (req, res,next) ->
 
 # get a course for the teacher
 router.get '/:course_abbr', (req, res, next) ->
-
+  console.log req.course_id
   models.Course.find req.course_id,
     include:
       model: models.User
