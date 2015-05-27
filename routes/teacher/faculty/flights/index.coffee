@@ -82,6 +82,8 @@ router.get '/:course_abbr', (req, res, next) ->
   .then (course) ->
     console.log course
     res.render 'faculty/flight', course: course
+  .catch (err) ->
+    console.log err
 
 # view the course missions
 router.get '/:abbr/settings', (req, res, next) ->
