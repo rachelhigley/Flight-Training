@@ -57,12 +57,25 @@ router.get '/:course_abbr', (req, res, next) ->
     include:
       model: models.User
       as: 'Students'
-      include:[models.StudentLevel, {
+      include:[{
+        model: models.StudentLevel
+        include: {
+          model: models.Level
+          where:
+            CourseId: req.course_id
+        }
+      },
+      {
         model: models.StudentMission
-        include:[models.Mission,
+        include:[ models.Mission,
           {
             model: models.Comment
             include: models.User
+          }
+          , {
+            model: models.Level
+            where:
+              CourseId: req.course_id
           }
         ]
       }]

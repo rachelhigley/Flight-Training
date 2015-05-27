@@ -8,8 +8,8 @@ router.get '/', (req, res, next) ->
 router.get '/:course_abbr', (req, res, next) ->
   async = require 'async'
 
-  async.parallel
-    course: (callback) ->
+  async.waterfall [
+    (callback) ->
       models.Course.find
         where:
           abbr: req.params.course_abbr
@@ -21,8 +21,11 @@ router.get '/:course_abbr', (req, res, next) ->
           }]
       .then (course) ->
         callback null, course
-    levels: (callback) ->
+    , (course, callback) ->
+
       models.Level.findAll
+        where:
+          CourseId: course.id
         include:
           model: models.StudentMission
           include: [{
@@ -38,8 +41,11 @@ router.get '/:course_abbr', (req, res, next) ->
           ]
         order: [['id','ASC'],[models.StudentMission, 'MissionStatusId', 'DESC']]
       .then (levels) ->
-        callback null, levels
-  , (err, result) ->
+        callback null,
+          course: course
+          levels: levels
+  ] , (err, result) ->
+    console.log result
     res.render 'students/flight', result
 
 router.get '/:course_abbr/join', (req, res, next) ->
@@ -67,6 +73,18 @@ router.post '/mission', (req, res, next) ->
       id: data.id
   .catch (err) ->
     res.sendStatus 200
+
+router.post '/add/mission', (req, res, next) ->
+  models.Mission.create req.body
+  .then (data) ->
+    req.body.UserId = req.user.id
+    req.body.MissionId = data.id
+    models.StudentMission.create req.body
+    .then (data) ->
+      res.send
+        id: data.id
+    .catch (err) ->
+      res.sendStatus 200
 
 router.put '/mission', (req, res, next) ->
   req.body.Comment.UserId = req.user.id
