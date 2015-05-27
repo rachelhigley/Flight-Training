@@ -61,8 +61,6 @@ router.get '/:course_abbr', (req, res, next) ->
         model: models.StudentLevel
         include: {
           model: models.Level
-          where:
-            CourseId: req.course_id
         }
       },
       {
@@ -74,8 +72,6 @@ router.get '/:course_abbr', (req, res, next) ->
           }
           , {
             model: models.Level
-            where:
-              CourseId: req.course_id
           }
         ]
       }]

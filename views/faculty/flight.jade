@@ -30,26 +30,29 @@ block content
               .list-group
                 - var missions = 0; var completed = 0;
                 for level in student.StudentLevels
-                  - missions += level.to_complete
+                  if level.Level.CourseId === course.id
+                    - missions += level.to_complete
+
                 for studentMission in student.StudentMissions
-                  if studentMission.MissionStatusId === 4
-                    - completed++
-                  if studentMission.MissionStatusId === 3
-                    .list-group-item.add.margin-top(mission-id="#{studentMission.Mission.id}")
-                      .list-group-item-heading.oh
-                        h4.pull-left
-                          | #{studentMission.Mission.name}
-                        .pull-right
-                          a.btn.btn-reject(href="/faculty/flights/#{course.abbr}/mission/#{studentMission.id}/2") Reject
-                          | &nbsp;
-                          a.btn.btn-warning(href="/faculty/flights/#{course.abbr}/mission/#{studentMission.id}/4") Accept
-                      .list-group-item-text
-                        for comment in studentMission.Comments
-                          include ../common/comment
-                        form(action="/faculty/flights/#{course.abbr}/mission/#{studentMission.id}/comment",method="post").comment
-                          h4 Add Comment
-                          textarea.textarea(name="text", placeholder='Comment', style='width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;')
-                          button.btn.btn-warning.timeline-btn.btn-block(type="submit") Send Comment
+                  if studentMission.Level.CourseId === course.id
+                    if studentMission.MissionStatusId === 4
+                      - completed++
+                    if studentMission.MissionStatusId === 3
+                      .list-group-item.add.margin-top(mission-id="#{studentMission.Mission.id}")
+                        .list-group-item-heading.oh
+                          h4.pull-left
+                            | #{studentMission.Mission.name}
+                          .pull-right
+                            a.btn.btn-reject(href="/faculty/flights/#{course.abbr}/mission/#{studentMission.id}/2") Reject
+                            | &nbsp;
+                            a.btn.btn-warning(href="/faculty/flights/#{course.abbr}/mission/#{studentMission.id}/4") Accept
+                        .list-group-item-text
+                          for comment in studentMission.Comments
+                            include ../common/comment
+                          form(action="/faculty/flights/#{course.abbr}/mission/#{studentMission.id}/comment",method="post").comment
+                            h4 Add Comment
+                            textarea.textarea(name="text", placeholder='Comment', style='width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;')
+                            button.btn.btn-warning.timeline-btn.btn-block(type="submit") Send Comment
               h4 Progress
               .progress
                 .progress-bar(style="width:#{completed/missions*100}%")
