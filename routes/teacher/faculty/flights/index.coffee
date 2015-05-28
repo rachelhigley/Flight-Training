@@ -1,7 +1,6 @@
 express = require('express')
 router  = express.Router()
 models  = appRequire('models')
-
 router.param 'course_abbr',(req, res, next, abbr) ->
 
   models.Course.find

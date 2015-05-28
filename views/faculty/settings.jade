@@ -10,7 +10,7 @@ block content
       li.time-label.locked
         span.text-uppercase
           | Missions
-      li.timeline-item.add(data-toggle="collapse", href="#newArea")
+      li.timeline-item.add
         i.fa
         form(action="area",method="POST").timeline-item
           .timeline-body.collapse(id="newArea")
@@ -26,8 +26,8 @@ block content
               label(for="name") Name
               input.form-control(type="text", id="name", name="name")
 
-          button.btn.btn-block.timeline-btn(type="submit") Create Area
-      li.timeline-item.add(data-toggle="collapse", href="#newMission")
+          button.btn.btn-block.timeline-btn(type="submit", href="#newArea") Create Area
+      li.timeline-item.add
         i.fa
         form(action="mission",method="POST").timeline-item
           .timeline-body.collapse(id="newMission")
@@ -42,7 +42,7 @@ block content
               input.form-control(type="text", id="name", name="name")
 
             textarea.textarea(name="description", placeholder='Description')
-          button.btn.btn-block.timeline-btn(type="submit") Create Mission
+          button.btn.btn-block.timeline-btn(type="submit", href="#newMission") Create Mission
 
       for area in course.Areas
         li.time-label.locked
@@ -83,3 +83,17 @@ block content
                       input.form-control(type="text", id="#{level.name}-toComplete",name="to_complete",value="#{level.to_complete}")
                       span.input-group-btn
                         button.btn.btn-warning(type="submit") Save
+
+    script(type='text/javascript').
+      $(function () {
+        $("button[type='submit'][href]").on('click',function(event){
+            var collapse = $($(this).attr('href'));
+            var open = collapse.hasClass('in');
+            console.log(open)
+            if(!open){
+              collapse.collapse();
+              event.preventDefault();
+            }
+
+          });
+      });
