@@ -33,20 +33,23 @@ block content
                       i.fa
                       .timeline-item
                         .timeline-body.collapse(id="mission-#{i}")
+                            h3 Select a Mission
                             for area in level.Areas
-                              h4 #{area.name}
+                              .callout
+                                h4 #{area.name}
                               .list-group
                                 for mission in area.Missions
                                   .list-group-item.submit(mission-id="#{mission.id}")
                                     h4.list-group-heading
                                       | #{mission.name}
                                     .list-group-item-text
-                                      .embedly-card
+                                      blockquote
                                         | !{mission.description}
                                     .btn.btn-block.timeline-btn
+                            .callout
+                              h4 Submit Your Own
                             .list-group
                               .list-group-item.submit
-                                h4.list-group-heading Submit Your Own
                                 .list-group-item-text
                                   .form-group
                                     label Title
@@ -64,7 +67,7 @@ block content
                           h3.timeline-header
                             | #{levels[index].StudentMissions[i].Mission.name}
                           .timeline-body
-                            blockquote.embedly-card
+                            blockquote
                               | !{levels[index].StudentMissions[i].Mission.description}
                           .btn.btn-block.timeline-btn
                     else if levels[index].StudentMissions[i].MissionStatusId === 2
@@ -96,7 +99,7 @@ block content
                           .timeline-body
                             for comment in levels[index].StudentMissions[i].Comments
                               if comment.CommentTypeId !== 1
-                                blockquote.embedly-card
+                                blockquote
                                   strong !{comment.User.name}:&nbsp;
                                   | !{comment.text}
                 - } }
@@ -124,7 +127,7 @@ block content
               {
                 item.parent().attr('data-toggle','').attr('href','').removeClass('select').addClass('submit').attr('mission-id',data.id);
                 item.prepend('<div class="timeline-header"></div>').find('.timeline-header').text(name);
-                mission_descr = $("<blockquote></blockquote").addClass('embedly-card').text(desc)
+                mission_descr = $("<blockquote></blockquote").text(desc)
                 item.find('.timeline-body').addClass('in').attr('style','').html(mission_descr);
 
               }

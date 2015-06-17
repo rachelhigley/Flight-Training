@@ -26,7 +26,8 @@ block content
               | #{student.name}
               //- a.pull-right(href="/faculty/student/#{student.id}") View Progress
             .timeline-body
-              h4 Pending Missions
+              .callout
+                h4 Pending Missions
               .list-group
                 - var missions = 0; var completed = 0;
                 for level in student.StudentLevels

@@ -151,8 +151,27 @@ li.ui-state-hover .timeline-item{
   box-sizing: content-box;
 }
 
-
-.timeline .pending .timeline-btn {
+.callout
+{
+  margin-bottom: 0;
+  border-radius: 3px 3px 0 0;
+  margin-top: 20px;
+  border-right: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+  border-left: 5px solid #eee;
+}
+.callout h4
+{
+  margin-bottom: 0;
+}
+.list-group
+{
+  border: 1px solid #ddd;
+  border-left: 5px solid #eee;
+  padding: 20px;
+  border-radius: 0 0 3px 3px
+}
+.timeline .pending .timeline-btn, .callout-pending {
   background-color: #83CAC3;
 }
 .timeline .pending .timeline-btn:after {
@@ -303,12 +322,20 @@ li.timeline-item .timeline-item
 .timeline .list-group-item.submit {
   margin-top: 20px;
   cursor: pointer;
+  border-radius: 3px
+}
+.timeline .list-group-item.submit:first-child {
+  margin-top: 0;
 }
 
 .timeline .list-group-item.submit h4 {
   line-height: 40px;
   padding: 10px 20px;
   margin: 0;
+}
+.list-group-item-heading
+{
+    border-bottom: 1px solid #eee
 }
 
 h4.list-group--heading {
@@ -367,7 +394,7 @@ li.selected .timeline-item .timeline-header {
 .timeline .timeline-item.select .timeline-body {
     background: white;
 }
-.embedly-card {
+.embedly-card, blockquote {
   margin: 10px 0;
 }
 

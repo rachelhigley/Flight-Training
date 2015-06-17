@@ -36,6 +36,7 @@ router.get '/:course_abbr', (req, res, next) ->
             {
               model: models.Comment
               include: models.User
+              order: [models.Comment, 'updatedAt', 'ASC']
             },
             models.Mission
           ]
