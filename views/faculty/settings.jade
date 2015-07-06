@@ -54,7 +54,7 @@ block content
             form(action="mission/#{mission.id}",method="POST").timeline-item
               h3.timeline-header
                 | #{mission.name}
-                a.pull-right.fa.fa-trash(href="#{course.abbr}/mission/#{mission.id}/remove")
+                a.pull-right.fa.fa-trash(href="mission/#{mission.id}/remove")
               .timeline-body
                   textarea.textarea(name="description", placeholder='Description') !{mission.description}
               button.btn.btn-warning.btn-block.timeline-btn(type="submit")
