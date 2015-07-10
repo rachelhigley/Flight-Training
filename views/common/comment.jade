@@ -1,5 +1,5 @@
 if comment.CommentTypeId === 1
-  a.embedly-card(href="#{comment.text}", data-card-width="100%")
+  a.embedly-card(href="#{comment.text}", data-card-width="100%") #{comment.text}
 else
   blockquote.embedly-card
     strong !{comment.User.name}:&nbsp;
