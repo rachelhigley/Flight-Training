@@ -21,29 +21,30 @@ block content
           span.text-uppercase
             | #{student.name}
             //- a.pull-right(href="/faculty/student/#{student.id}") View Progress
-        for studentMission in student.StudentMissions
+        for studentMission, index in student.StudentMissions
+          - count = index+1
           if studentMission.MissionStatusId === 4
             li.timeline-item.complete
               i.fa
               .timeline-item
-                h3.timeline-header #{studentMission.Mission.name}
+                h3.timeline-header #{count}. #{studentMission.Mission.name}
            if studentMission.MissionStatusId === 1
             li.timeline-item.select
               i.fa
               .timeline-item
-                h3.timeline-header #{studentMission.Mission.name}
+                h3.timeline-header #{count}. #{studentMission.Mission.name}
           if studentMission.MissionStatusId === 2
             li.timeline-item.resubmit
               i.fa
               .timeline-item
-                h3.timeline-header #{studentMission.Mission.name}
+                h3.timeline-header #{count}. #{studentMission.Mission.name}
 
           if studentMission.MissionStatusId === 3
             li.timeline-item.pending
               i.fa
               .timeline-item
                 h3.timeline-header
-                  | #{studentMission.Mission.name}
+                  | #{count}. #{studentMission.Mission.name}
                   .pull-right
                     a.btn.btn-reject(href="/faculty/flights/#{course.abbr}/mission/#{studentMission.id}/2") Reject
                     | &nbsp;
