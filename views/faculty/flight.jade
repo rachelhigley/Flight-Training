@@ -38,6 +38,10 @@ block content
                   if studentMission.Level.CourseId === course.id
                     if studentMission.MissionStatusId === 4
                       - completed++
+                      .list-group-item.complete
+                        .list-group-item-heading.oh
+                          h4.pull-left
+                            | #{studentMission.Mission.name}
                     if studentMission.MissionStatusId === 3
                       .list-group-item.add.margin-top(mission-id="#{studentMission.Mission.id}")
                         .list-group-item-heading.oh
