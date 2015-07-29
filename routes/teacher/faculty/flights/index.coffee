@@ -51,31 +51,31 @@ router.post '/', (req, res,next) ->
 
 # get a course for the teacher
 router.get '/:course_abbr', (req, res, next) ->
-
   models.Course.find req.course_id,
     include:
       model: models.User
       as: 'Students'
-      include:[{
-        model: models.StudentLevel
-        include: {
-          model: models.Level
-        }
-      },
-      {
+      include:
         model: models.StudentMission
-        include:[ models.Mission,
+        include:[
+          {
+            model: models.Mission
+          }
           {
             model: models.Comment
             include: models.User
           }
-          , {
+          {
             model: models.Level
+            include: {
+                model: models.Course
+                where:
+                  id: req.course_id
+              }
           }
         ]
-      }]
+    order: [[{ model: models.User, as: 'Students' }, models.StudentMission, 'MissionStatusId', 'DESC']]
   .then (course) ->
-    console.log course
     res.render 'faculty/flight', course: course
   .catch (err) ->
     console.log err

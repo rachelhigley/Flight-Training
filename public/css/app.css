@@ -171,10 +171,10 @@ li.ui-state-hover .timeline-item{
   padding: 20px;
   border-radius: 0 0 3px 3px
 }
-.timeline .pending .timeline-btn, .callout-pending {
+.timeline .pending .timeline-btn:not(.btn-warning), .callout-pending {
   background-color: #83CAC3;
 }
-.timeline .pending .timeline-btn:after {
+.timeline .pending .timeline-btn:not(.btn-warning):after {
   content: 'pending';
 }
 
