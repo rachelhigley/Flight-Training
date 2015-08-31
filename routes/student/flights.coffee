@@ -46,7 +46,6 @@ router.get '/:course_abbr', (req, res, next) ->
           course: course
           levels: levels
   ] , (err, result) ->
-    console.log result
     res.render 'students/flight', result
 
 router.get '/:course_abbr/join', (req, res, next) ->
@@ -99,6 +98,15 @@ router.put '/mission', (req, res, next) ->
     res.sendStatus 200
 
   models.Comment.create req.body.Comment
+  .catch (err) ->
+    console.log err
+
+router.get '/:course_abbr/delete/:id', (req, res, next) ->
+  models.StudentMission.destroy
+    where:
+      id: req.params.id
+  .then () ->
+    res.redirect "/flights/#{req.params.course_abbr}"
   .catch (err) ->
     console.log err
 

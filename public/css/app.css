@@ -76,7 +76,7 @@ li.ui-state-hover .timeline-item{
   padding-bottom: 23px;
 }
 
-.timeline li.timeline-item i.fa {
+.timeline li.timeline-item > i.fa {
   display: block;
   content: '';
   border-left-color: transparent;
@@ -96,14 +96,14 @@ li.ui-state-hover .timeline-item{
   transition: 0.5s left;
 }
 
-.timeline li.timeline-label i.fa:before {
+.timeline li.timeline-label > i.fa:before {
     display: none;
 }
 
-.timeline .timeline-item .list-group i.fa {
+.timeline .timeline-item .list-group > i.fa {
   margin-left: 0;
 }
-.timeline li.timeline-item i:before
+.timeline li.timeline-item > i:before
 {
   display: block;
   font-size: 16px;
@@ -114,7 +114,7 @@ li.ui-state-hover .timeline-item{
   top: -25px;
 }
 
-.timeline li.timeline-item i:after {
+.timeline li.timeline-item > i:after {
   text-transform: uppercase;
   font-size: 20px;
   line-height: 50px;
@@ -132,11 +132,11 @@ li.ui-state-hover .timeline-item{
   padding: 3px;
   color: #fff;
 }
-.timeline .complete i:before {
+.timeline .complete > i:before {
   content: "\f00c";
   color: white;
 }
-.timeline>li.complete i.fa {
+.timeline>li.complete > i.fa {
     border-right-color: #21C0B5;
 }
 .timeline .complete .timeline-btn:after {
@@ -178,10 +178,10 @@ li.ui-state-hover .timeline-item{
   content: 'pending';
 }
 
-.timeline .pending i:before {
+.timeline .pending > i:before {
   content: "\f017";
 }
-.timeline>li.pending i.fa {
+.timeline>li.pending > i.fa {
   color: #83CAC3;
 }
 
@@ -203,14 +203,14 @@ li.ui-state-hover .timeline-item{
   /* border-color: #CF850F; */
   /* height: 25px; */
 }
-.timeline>li.resubmit i.fa {
+.timeline>li.resubmit > i.fa {
   color: #CF850F;
 }
 
-.timeline>li.selected i.fa {
+.timeline>li.selected > i.fa {
     left: 100%;
 }
-.timeline .resubmit i:before {
+.timeline .resubmit > i:before {
   content: "\f01e";
 }
 
@@ -221,10 +221,10 @@ li.ui-state-hover .timeline-item{
 .timeline .submit .timeline-btn:after {
   content: 'submit';
 }
-.timeline .submit i.fa {
+.timeline .submit > i.fa {
   color: #F39C12;
 }
-.timeline .submit i:before {
+.timeline .submit > i:before {
   content: "\f111";
 }
 
@@ -234,13 +234,13 @@ li.ui-state-hover .timeline-item{
 .select .timeline-btn:after {
   content: 'select mission';
 }
-.timeline .add i:before {
+.timeline .add > i:before {
   content: "\f067";
 }
-.select i.fa:before {
+.select > i.fa:before {
   content: "\f10c";
 }
-.timeline .select i.fa, .timeline .add i.fa {
+.timeline .select > i.fa, .timeline .add > i.fa {
   color: white;
   border-right-color: #F3C070;
 }
@@ -248,7 +248,7 @@ li.ui-state-hover .timeline-item{
 .timeline-item.select .timeline-item, .timeline-item.locked .timeline-header{
     background-color: #888;
 }
-.timeline .locked i {
+.timeline .locked > i {
   border-right-color: #888;
 }
 .timeline .locked .timeline-btn {
@@ -257,12 +257,12 @@ li.ui-state-hover .timeline-item{
 .timeline .locked .timeline-btn:after {
   content: 'locked';
 }
-.timeline li.timeline-item.locked i:before {
+.timeline li.timeline-item.locked > i:before {
   content: "\f023";
   color: #fff;
   left: 17px;
 }
-.timeline .locked i.fa {
+.timeline .locked > i.fa {
   color: #888;
 }
 
@@ -355,7 +355,7 @@ li.selected .timeline-item .timeline-header {
 }
 .timeline-item {
 }
-.timeline-item.selected i.fa
+.timeline-item.selected > i.fa
 {
   margin-left: -77px
 }
@@ -436,13 +436,13 @@ li.selected .timeline-item .timeline-header {
 .timeline .timeline-header a.fa {
   color: #777;
 }
-.timeline .time-label i
+.timeline .time-label > i
 {
   line-height: 1.4;
   color: white;
 }
 
-.timeline-item i
+.timeline-item > i
 {
   border-right-color: white;
   color: #000;

@@ -26,6 +26,5 @@ passport.use new GitHubStrategy({
       username: profile.username
       UserTypeId: 1
   .then (user) ->
-    console.log user
     next null, user[0]
 )

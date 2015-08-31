@@ -2,7 +2,7 @@ extends ../layout
 
 block content
   //- Main content
-  section.content
+  section.content(course-abbr="#{course.abbr}")
     if !course.Levels[0].StudentLevel
       h3 #{course.name}
       p You aren't currently particiaping in this flight.
@@ -66,6 +66,8 @@ block content
                         .timeline-item
                           h3.timeline-header
                             | #{levels[index].StudentMissions[i].Mission.name}
+                            a(href="#{course.abbr}/delete/#{levels[index].StudentMissions[i].id}").pull-right
+                              i.fa.fa-trash
                           .timeline-body
                             blockquote
                               | !{levels[index].StudentMissions[i].Mission.description}
@@ -126,7 +128,9 @@ block content
               success: function(data)
               {
                 item.parent().attr('data-toggle','').attr('href','').removeClass('select').addClass('submit').attr('mission-id',data.id);
-                item.prepend('<div class="timeline-header"></div>').find('.timeline-header').text(name);
+                var course_abbr = $('.content').attr('course-abbr')
+                var trash = $('<a href="" class="pull-right"></a>').attr('href',course_abbr+"/delete/"+data.id).html('<i class="fa fa-trash"></i>')
+                item.prepend('<div class="timeline-header"></div>').find('.timeline-header').text(name).append(trash);
                 mission_descr = $("<blockquote></blockquote").text(desc)
                 item.find('.timeline-body').addClass('in').attr('style','').html(mission_descr);
 
@@ -151,7 +155,9 @@ block content
                 success: function(data)
                 {
                   item.parent().attr('data-toggle','').attr('href','').removeClass('select').addClass('submit').attr('mission-id',data.id);
-                  item.prepend('<div class="timeline-header"></div>').find('.timeline-header').text(mission.find('.list-group-heading').text());
+                  var course_abbr = $('.content').attr('course-abbr')
+                var trash = $('<a href="" class="pull-right"></a>').attr('href',course_abbr+"/delete/"+data.id).html('<i class="fa fa-trash"></i>')
+                  item.prepend('<div class="timeline-header"></div>').find('.timeline-header').text(mission.find('.list-group-heading').text()).append(trash);;
                   mission_descr = mission.find('.list-group-item-text').html();
                   item.find('.timeline-body').addClass('in').attr('style','').html(mission_descr);
                 }
