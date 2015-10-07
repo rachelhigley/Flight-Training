@@ -32,9 +32,12 @@ app.controller 'FacultyCtrl', ['$rootScope','$scope', '$routeParams','$http', ($
     completed = 0
 
     for mission in missions
-      completed++ if mission.MissionStatusId is 2
+      completed++ if mission.MissionStatusId is 4
 
     completed
+
+  $scope.getPercent = (missions, levels) ->
+    return parseInt(getCompleted(missions) / getTotal(levels) * 100)
 
   $scope.getPending = (missions) ->
 
@@ -46,7 +49,6 @@ app.controller 'FacultyCtrl', ['$rootScope','$scope', '$routeParams','$http', ($
     pending
 
 
-  $scope.getPercent = (missions, levels) ->
-    return parseInt(getCompleted(missions) / getTotal(levels) * 100)
+
 
 ]
