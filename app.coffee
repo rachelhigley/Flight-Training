@@ -36,21 +36,13 @@ app.use passport.initialize()
 app.use passport.session()
 
 
-
-app.use require('node-sass-middleware')
-  src: __dirname
-  dest: path.join(__dirname, 'public')
-  debug: false
-  outputStyle: 'compressed'
-  prefix: '/prefix.'
-
 # setup routes
 appRequire('routes') app
 
 # use errors
 appRequire('core/errors') app
 
-
+# writes coffee file on start
 fs = require 'fs'
 coffee = require 'coffee-script'
 async = require 'async'
