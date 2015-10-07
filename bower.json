@@ -22,6 +22,7 @@
     "checklist-model": "~0.6.0",
     "angular-animate": "~1.4.7",
     "angular-wysiwyg": "~1.2.4",
-    "textAngular": "~1.4.6"
+    "textAngular": "~1.4.6",
+    "bootstrap": "~3.3.5"
   }
 }
