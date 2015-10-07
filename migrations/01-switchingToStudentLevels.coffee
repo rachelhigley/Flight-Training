@@ -13,13 +13,13 @@ module.exports =
 
     models.StudentLevel.findAll()
     .then (studentLevels) ->
-      models.StudentMissions.findAll
+      models.StudentMission.findAll
         attributes: ['id', 'LevelId' , 'UserId','StudentLevelId']
       .then (missions) ->
         for mission in missions
           for studentLevel in studentLevels
             continue unless studentLevel.UserId is mission.UserId
-            if studentLevel.LevelId is mission.LevelId
+            if studentLevel.dataValues.LevelId is mission.dataValues.LevelId
               mission.updateAttributes
                 StudentLevelId: studentLevel.id
               break
