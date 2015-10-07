@@ -11,13 +11,21 @@ module.exports =
     .catch (err) ->
       debug err
 
-    models.StudentLevel.findAll()
+    migration.addColumn 'StudentLevels', 'name',
+      type: DataTypes.STRING,
+    .catch (err) ->
+      debug err
+
+    models.StudentLevel.findAll
+      include: models.Level
     .then (studentLevels) ->
       models.StudentMission.findAll
         attributes: ['id', 'LevelId' , 'UserId','StudentLevelId']
       .then (missions) ->
-        for mission in missions
-          for studentLevel in studentLevels
+        for studentLevel in studentLevels
+          studentLevel.updateAttributes
+            name: studentLevel.Level.name
+          for mission in missions
             continue unless studentLevel.UserId is mission.UserId
             if studentLevel.dataValues.LevelId is mission.dataValues.LevelId
               mission.updateAttributes
@@ -30,6 +38,10 @@ module.exports =
 
   down: (migration, DataTypes, done) ->
     migration.removeColumn 'StudentMissions', 'StudentLevelId'
+    .catch (err) ->
+      debug err
+
+    migration.removeColumn 'StudentLevels', 'name'
     .catch (err) ->
       debug err
 
