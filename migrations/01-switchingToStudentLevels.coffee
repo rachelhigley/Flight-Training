@@ -14,7 +14,7 @@ module.exports =
     models.StudentLevels.findAll()
     .then (studentLevels) ->
       models.StudentMissions.findAll
-        attributes ['id', 'LevelId' , 'UserId','StudentLevelId']
+        attributes: ['id', 'LevelId' , 'UserId','StudentLevelId']
       .then (missions) ->
         for mission in missions
           for studentLevel in studentLevels
