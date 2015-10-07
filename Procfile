@@ -1,2 +1,2 @@
-web: bower install; node bin/www
+web: node bin/www
 dev: nodemon ./bin/www -watch / -e "coffee"
