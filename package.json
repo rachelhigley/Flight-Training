@@ -2,6 +2,7 @@
   "name": "Flight-Training",
   "version": "0.0.0",
   "private": true,
+  "cacheDirectories": ["node_modules", "public/libs" ],
   "scripts": {
     "start": "node ./bin/www"
   },
