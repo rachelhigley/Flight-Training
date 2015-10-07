@@ -11,7 +11,7 @@ module.exports =
     .catch (err) ->
       debug err
 
-    models.StudentLevels.findAll()
+    models.StudentLevel.findAll()
     .then (studentLevels) ->
       models.StudentMissions.findAll
         attributes: ['id', 'LevelId' , 'UserId','StudentLevelId']
