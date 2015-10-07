@@ -5,6 +5,10 @@ module.exports = (sequelize, DataTypes) ->
     to_complete:
       type: DataTypes.INTEGER(11)
 
+    name:
+      type: DataTypes.STRING
+
+
   , classMethods:
     associate: (models) ->
 
@@ -13,3 +17,6 @@ module.exports = (sequelize, DataTypes) ->
 
       StudentLevel.belongsTo models.User,
         onDelete:'cascade'
+
+      StudentLevel.hasMany models.StudentMission,
+        onDelete: 'cascade'

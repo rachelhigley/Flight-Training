@@ -1,99 +1,80 @@
-extends ../layout
-block content
-  section.content-header
-    h1
-     | #{course.name}&nbsp;&nbsp;
-     i.fa.fa-gear.text-yellow(data-toggle="modal", data-target="#settings")
-  //- Main content
-  section.content
+section.content-header
+  h1
+   | {{course.name}}&nbsp;&nbsp;
+   i.fa.fa-gear.text-yellow(ng-click="showSettings = !showSettings")
+//- Main content
+section.content
+  .well(collapse="!showSettings")
+    table.table
+      tr
+        th(width="50%") Level
+        th Missions in the Level
+      tr(ng-repeat="(index, level) in course.Levels")
+          td.text-uppercase
+            | {{level.name}}
+            span.text-muted
+              | &nbsp;(Suggested: {{ index === 4 ? 'Final' : 'Week '+(index+1)}})
+          td
+            .input-group
+              input.form-control(type="text",ng-model="level.to_complete")
+              span.input-group-btn
+                button.btn.btn-warning(ng-click="updateLevel(level)") Save
+
+
+  ul.timeline
+    li.time-label.locked
+      span.text-uppercase
+        | Missions
+
+    //- Add Level
+    li.timeline-item.add
+      i.fa
+      form(ng-submit="addArea()").timeline-item
+        .timeline-body(collapse="!showArea")
+          h4 New Area
+          .form-group
+            label(for="name") Name
+            input.form-control(type="text", id="name", ng-model="newArea.name")
+          label Include in Levels:
+          .form-group
+            .checkbox(ng-repeat="level in course.Levels")
+              label.text-uppercase(for="level-{{level.id}}")
+                input(id="level-{{level.id}}", type="checkbox", checklist-model="newArea.levels", checklist-value="level.id")
+                | {{level.name}}
+
+
+        button.btn.btn-block.timeline-btn(type="submit" ng-click="showArea = !showArea") Create Area
+
+    //- Add Mission
+    li.timeline-item.add
+      i.fa
+      form(ng-submit="addMission()").timeline-item
+        .timeline-body(collapse="!showMission")
+          h4 New Mission
+          .form-group
+            label(for="area") Area
+            select.form-control#area(ng-model="newMission.AreaId")
+              option.text-uppercase(value="{{area.id}}", ng-repeat="area in course.Areas") {{area.name}}
+          .form-group
+            label(for="name") Name
+            input.form-control(type="text", id="name", ng-model="newMission.name")
+
+          text-angular(name="description", placeholder='Description',  ng-model="newMission.description")
+        button.btn.btn-block.timeline-btn(type="submit",ng-click="showMission = !showMission") Create Mission
     ul.timeline
-      li.time-label.locked
+      //- area titles
+      li.time-label.submit(ng-click="area.show = !area.show",ng-repeat-start="area in course.Areas", ng-class="{end: !area.show || area.Missions.length == 0}")
         span.text-uppercase
-          | Missions
-      li.timeline-item.add
+          | {{area.name}} (Missions: {{area.Missions.length}})
+
+      //- missions in area
+      li.timeline-item.update(collapse="!area.show",ng-repeat-end="",ng-repeat="mission in area.Missions")
         i.fa
-        form(action="area",method="POST").timeline-item
-          .timeline-body.collapse(id="newArea")
-            h4 New Area
-            label Include in Levels:
-            .form-group
-              for level in course.Levels
-                .checkbox
-                  label.text-uppercase(for="level-#{level.id}")
-                    input(id="level-#{level.id}", type="checkbox", name="levels[]",value="#{level.id}")
-                    | #{level.name}
-            .form-group
-              label(for="name") Name
-              input.form-control(type="text", id="name", name="name")
-
-          button.btn.btn-block.timeline-btn(type="submit", href="#newArea") Create Area
-      li.timeline-item.add
-        i.fa
-        form(action="mission",method="POST").timeline-item
-          .timeline-body.collapse(id="newMission")
-            h4 New Mission
-            .form-group
-              label(for="area") Area
-              select.form-control#area(name="AreaId")
-                for area in course.Areas
-                  option.text-uppercase(value="#{area.id}") #{area.name}
-            .form-group
-              label(for="name") Name
-              input.form-control(type="text", id="name", name="name")
-
-            textarea.textarea(name="description", placeholder='Description')
-          button.btn.btn-block.timeline-btn(type="submit", href="#newMission") Create Mission
-
-      for area in course.Areas
-        li.time-label.locked
-          span.text-uppercase
-            | #{area.name}
-        for mission in area.Missions
-          li.timeline-item.update
-            i.fa
-            form(action="mission/#{mission.id}",method="POST").timeline-item
-              h3.timeline-header
-                | #{mission.name}
-                a.pull-right.fa.fa-trash(href="mission/#{mission.id}/remove")
-              .timeline-body
-                  textarea.textarea(name="description", placeholder='Description') !{mission.description}
-              button.btn.btn-warning.btn-block.timeline-btn(type="submit")
-                | Update Mission
-
-  #settings.modal.fade(role="dialog")
-    .modal-dialog
-      .modal-content
-        .modal-header
-          button.close(type="button",data-dismiss="model")
-            i.fa.fa-times
-          h4.modal-title
-            | Settings
-        .modal-body
-          h3 Levels
-          table.table
-            tr
-              td(width="50%") Name
-              td Mission to complete the Level
-            for level in course.Levels
-              tr
-                form(action="level/#{level.id}",method="POST")
-                  td.text-uppercase #{level.name}
-                  td
-                    .input-group
-                      input.form-control(type="text", id="#{level.name}-toComplete",name="to_complete",value="#{level.to_complete}")
-                      span.input-group-btn
-                        button.btn.btn-warning(type="submit") Save
-
-    script(type='text/javascript').
-      $(function () {
-        $("button[type='submit'][href]").on('click',function(event){
-            var collapse = $($(this).attr('href'));
-            var open = collapse.hasClass('in');
-            console.log(open)
-            if(!open){
-              collapse.collapse();
-              event.preventDefault();
-            }
-
-          });
-      });
+        form(ng-submit="updateMission(mission)").timeline-item
+          h3.timeline-header
+            | {{mission.name}}
+            a.pull-right.fa.fa-trash(ng-click="deleteMission(area.Missions, $index)")
+          .timeline-body
+            text-angular(ng-model="mission.description")
+          button.btn.btn-warning.btn-block.timeline-btn(type="submit")
+            | {{ mission.button ? mission.button : 'Update Mission'}}

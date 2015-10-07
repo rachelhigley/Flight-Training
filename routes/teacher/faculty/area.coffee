@@ -4,19 +4,18 @@ models  = appRequire('models')
 
 # add the area to the term and levels
 router.post '/', (req, res, next) ->
+  console.log req.body
   models.Course.find
     where:
-      abbr: req.course_abbr
+      abbr: req.body.courseAbbr
   .then (course) ->
-    req.course_id = course.id
+    req.body.CourseId = course.id
 
-    models.Area.create
-      name: req.body.name
-      CourseId: req.course_id
+    models.Area.create req.body
     .then (area) ->
-      for level in req.body['levels[]']
+      for level in req.body['levels']
         area.addLevel level
-      res.redirect "/faculty/flights/#{req.course_abbr}/settings"
+      res.send area
 
 
 module.exports = router

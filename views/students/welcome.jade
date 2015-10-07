@@ -1,8 +1,13 @@
-extends ../layout
-
-block content
-  section.content-header
-    h1 Welcome
-  //- Main content
-  section.content
-    p Welcome to Flight Training. Select a course on the left to start your training.
+.content
+  h1 Welcome
+  p Welcome to Flight Training. Select a course on the left to start your training.
+  p &nbsp;
+  ul.timeline
+    li.time-label
+      span.text-uppercase
+        | My Flights
+      ul.timeline
+        li.time-label.submit.end(ng-repeat="course in course")
+          span.text-uppercase
+            a(ng-href="#/flights/{{course.abbr}}")
+              | {{course.name}} (completed: {{getPercent(course.Levels)}}%)

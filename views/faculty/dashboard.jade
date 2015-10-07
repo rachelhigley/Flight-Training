@@ -1,5 +1,13 @@
-extends ../layout
-
-block content
+.content
   h1 Welcome to Flight Training
   p Click on a flight to start training
+
+  .timeline
+    li.time-label
+      span.text-uppercase
+        | Courses
+      ul.timeline
+        li.time-label.submit.end(ng-repeat="course in courses")
+          span.text-uppercase
+            a(ng-href="#/faculty/{{course.abbr}}")
+              | {{course.name}} (Pending: {{ getPending(course,3) }})

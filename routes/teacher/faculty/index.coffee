@@ -1,18 +1,34 @@
 express = require('express')
 router  = express.Router()
 models  = appRequire('models')
-router.param 'course_abbr',(req, res, next, abbr) ->
 
+# get the course for every route
+router.param 'course_abbr',(req, res, next, abbr) ->
   models.Course.find
     where:
       abbr: abbr
   .then (course) ->
+    req.course = course
     req.course_id = course.id
     next()
 
-# route for craeting a course
-router.get '/new', (req, res, next) ->
-  res.render 'faculty/new'
+router.get '/', (req, res, next) ->
+  models.User.find
+    where:
+      id: req.user.id
+    include:
+      model: models.Course
+      as: 'Teachers'
+      include:
+        model: models.User
+        as: 'Students'
+        include:[
+          model: models.StudentMission
+          include: models.Mission
+        ]
+  .then (user) ->
+    res.send user
+
 
 # create a course
 router.post '/', (req, res,next) ->
@@ -47,7 +63,7 @@ router.post '/', (req, res,next) ->
       }
       ]
 
-    res.redirect '/faculty/dashboard'
+    res.sendStatus 200
 
 # get a course for the teacher
 router.get '/:course_abbr', (req, res, next) ->
@@ -55,7 +71,15 @@ router.get '/:course_abbr', (req, res, next) ->
     include:
       model: models.User
       as: 'Students'
-      include:
+      include:[{
+        model: models.StudentLevel
+        include: {
+          model: models.Level
+          where:
+            CourseId: req.course_id
+        }
+      },
+      {
         model: models.StudentMission
         include:[
           {
@@ -65,18 +89,18 @@ router.get '/:course_abbr', (req, res, next) ->
             model: models.Comment
             include: models.User
           }
-          {
-            model: models.Level
-            include: {
-                model: models.Course
-                where:
-                  id: req.course_id
-              }
-          }
         ]
-    order: [[{ model: models.User, as: 'Students' }, models.StudentMission, 'MissionStatusId', 'DESC']]
+      }]
+    order: [[{ model: models.User, as: 'Students' }, models.StudentMission, 'MissionStatusId', 'DESC'], [{ model: models.User, as: 'Students' }, models.StudentMission, models.Comment, 'updatedAt', 'ASC']]
   .then (course) ->
-    res.render 'faculty/flight', course: course
+    if course
+      for student in course.Students
+        for mission in student.StudentMissions
+          for comment in mission.Comments
+            comment.text = comment.text?.toString('utf8')
+      res.send course
+    else
+      res.send req.course
   .catch (err) ->
     console.log err
 
@@ -93,6 +117,9 @@ router.get '/:abbr/settings', (req, res, next) ->
       }]
     order: [[models.Level, 'id','ASC'], [models.Area, models.Mission, 'id','ASC']]
   .then (course) ->
-    res.render 'faculty/settings.jade', course: course
+    for area in course.Areas
+      for mission in area.Missions
+        mission.description = mission.description?.toString('utf8')
+    res.send course
 
 module.exports = router

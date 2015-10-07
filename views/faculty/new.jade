@@ -1,25 +1,13 @@
-extends ../layout
-
-block content
-  section.content-header
-    h1
-      | New Flight
-    ol.breadcrumb
-      li
-        a(href='#')
-          i.fa.fa-dashboard
-          |  Flights
-      li.active New
-  //- Main content
-  section.content
-    .row
-      .col-md-6
-        form(action="/faculty/flights", method="POST")
-          .form-group
-            label(for="name") Name:
-            input.form-control(type="text", id="name", name="name")
-          .form-group
-            label(for="abbr") Abbreviation:
-            input.form-control(type="text", id="abbr", name="abbr")
-          .form-group
-            button.btn.btn-warning(type="submit") Create Course
+//- Main content
+section.content
+  .row
+    .col-md-6
+      form(ng-submit="createFlight()")
+        .form-group
+          label(for="name") Name:
+          input.form-control(type="text", id="name", ng-model="newFlight.name")
+        .form-group
+          label(for="abbr") Abbreviation:
+          input.form-control(type="text", id="abbr", ng-model="newFlight.abbr")
+        .form-group
+          button.btn.btn-warning(type="submit") Create Flight

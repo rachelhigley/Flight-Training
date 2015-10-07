@@ -1,0 +1,27 @@
+{
+  "name": "Flight-Training",
+  "version": "0.0.0",
+  "homepage": "https://github.com/rachelhigley/Flight-Training",
+  "authors": [
+    "Rachel Higley <me@rachelhigley.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "font-awesome": "~4.4.0",
+    "angular-bootstrap": "~0.13.4",
+    "AdminLTE": "admin-lte#~2.3.0",
+    "angular-route": "~1.4.6",
+    "angular": "~1.4.6",
+    "checklist-model": "~0.6.0",
+    "angular-animate": "~1.4.7",
+    "angular-wysiwyg": "~1.2.4",
+    "textAngular": "~1.4.6"
+  }
+}

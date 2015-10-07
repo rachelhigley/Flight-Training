@@ -1,3 +1,23 @@
+.wrapper {
+  position: relative;
+}
+.pointer {
+  cursor: pointer;
+}
+.content-wrapper {
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+.content {
+  overflow: hidden;
+  margin: 15px;
+  padding: 0;
+}
+.main-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
 .timeline>li>.timeline-item.locked {
   background-color: rgba(255,255,255,0.3);
 }
@@ -21,7 +41,7 @@ li.ui-state-hover .timeline-item{
   white-space: nowrap;
   transform: translateX(-100%);
   background: #B44659;
-  transition: 0.5s transform;
+  transition: 0.35s transform;
 }
 
 .missions:hover ul {
@@ -37,19 +57,57 @@ li.ui-state-hover .timeline-item{
   min-width: 100px;
   text-align: center;
 }
-.timeline>li.time-label.unlocked span{
-  background-color: #21C0B5;
+
+.timeline>li.time-label span{
   color: #fff;
   position: relative;
   z-index: 1;
+  background-color: #aaa;
 }
 
-.timeline>li.time-label.unlocked:before {
-  border-color: #21C0B5;
+.timeline>li.time-label:before {
   height: 55px;
   top: 30px;
   padding-bottom: 0;
+
 }
+.timeline>li.time-label.pending span, {
+  background-color: #83CAC3;
+}
+.timeline>li.time-label.pending:before{
+  border-color: #83CAC3;
+}
+
+.timeline>li.time-label.select span{
+  background-color: #F3C070;
+}
+.timeline>li.time-label.select:before {
+  border-color: #F3C070;
+}
+
+.timeline>li.time-label.resubmit span{
+  background-color: #CF850F;
+}
+.timeline>li.time-label.resubmit:before {
+  border-color: #CF850F;
+}
+
+.timeline>li.time-label.submit span{
+  background-color: #F39C12;
+}
+.timeline>li.time-label.submit:before {
+  border-color: #F39C12;
+}
+
+.timeline>li.time-label.complete span{
+  background-color: #21C0B5;
+}
+.timeline>li.time-label.complete:before  {
+  border-color: #21C0B5;
+}
+
+
+
 .timeline>li.time-label.locked span {
   background-color: #d2d6de;
   color: #000;
@@ -71,7 +129,7 @@ li.ui-state-hover .timeline-item{
   height: 0;
   position: absolute;
   left: 46px;
-  transition: 0.5s all 0.5s;
+  transition: 0.35s all;
   top: 30px;
   padding-bottom: 23px;
 }
@@ -93,7 +151,7 @@ li.ui-state-hover .timeline-item{
   padding: 0;
   width: 0;
   height: 0;
-  transition: 0.5s left;
+  transition: 0.35s all;
 }
 
 .timeline li.timeline-label > i.fa:before {
@@ -136,7 +194,7 @@ li.ui-state-hover .timeline-item{
   content: "\f00c";
   color: white;
 }
-.timeline>li.complete > i.fa {
+.timeline .timeline-item.complete > i.fa {
     border-right-color: #21C0B5;
 }
 .timeline .complete .timeline-btn:after {
@@ -145,7 +203,7 @@ li.ui-state-hover .timeline-item{
 .timeline .complete .timeline-btn {
   background-color: #21C0B5;
 }
-.timeline>li.complete:before {
+.timeline .timeline-item.complete:before {
   border-color: #21C0B5;
   height: 100%;
   box-sizing: content-box;
@@ -159,6 +217,9 @@ li.ui-state-hover .timeline-item{
   border-right: 1px solid #ddd;
   border-top: 1px solid #ddd;
   border-left: 5px solid #eee;
+}
+.callout.border-bottom {
+  border-bottom: 1px solid #ddd;
 }
 .callout h4
 {
@@ -181,14 +242,27 @@ li.ui-state-hover .timeline-item{
 .timeline .pending > i:before {
   content: "\f017";
 }
-.timeline>li.pending > i.fa {
+.timeline .timeline-item.pending > i.fa {
   color: #83CAC3;
 }
 
-.timeline>li.pending:before {
-  border-color: #83CAC3;
+.timeline .timeline-item:before
+{
   height: 100%;
   box-sizing: content-box;
+}
+.timeline .timeline-item.select:before {
+  border-color: #F3C070;
+}
+.timeline .timeline-item.submit:before,
+.timeline .timeline-item.update:before {
+  border-color: #F39C12;
+}
+.timeline .timeline-item.resubmit:before {
+  border-color: #CF850F;
+}
+.timeline .timeline-item.pending:before {
+  border-color: #21C0B5;
 }
 
 
@@ -199,16 +273,17 @@ li.ui-state-hover .timeline-item{
 .timeline .resubmit .timeline-btn:after {
   content: 'resubmit';
 }
-.timeline>li.resubmit:before {
+.timeline .timeline-item.resubmit:before {
   /* border-color: #CF850F; */
   /* height: 25px; */
 }
-.timeline>li.resubmit > i.fa {
+.timeline .timeline-item.resubmit > i.fa {
   color: #CF850F;
 }
 
-.timeline>li.selected > i.fa {
+.timeline .timeline-item.selected > i.fa {
     left: 100%;
+    margin-left: 16px;
 }
 .timeline .resubmit > i:before {
   content: "\f01e";
@@ -291,25 +366,26 @@ li.timeline-item .timeline-item
   background: none;
 }
 
-.timeline>li.complete .timeline-header, .timeline>li.complete .timeline-body, .progress-bar {
+.timeline .timeline-item.complete .timeline-header, .timeline .timeline-item.complete .timeline-body, .progress-bar {
     background: #21C0B5;
     color: white;
 }
-.timeline>li>.timeline-item>.timeline-header {
+.timeline>li>.timeline-item .timeline-header {
   padding: 21px 10px;
   position: relative;
   left: 0;
-  transition: 0.5s left;
+  transition: 0.35s all;
+  margin-left: 0;
 }
 .timeline-header {
   background-color: white;
 }
 
-.timeline>li.locked>.timeline-item>.timeline-header {
+.timeline>li.locked>.timeline-item .timeline-header {
     color: white;
 }
 
-.timeline>li.complete>.timeline-item>.timeline-header {
+.timeline .timeline-item.complete>.timeline-item .timeline-header {
     color: white;
 }
 
@@ -352,23 +428,20 @@ h4.list-group-title {
 
 li.selected .timeline-item .timeline-header {
     left: 100%;
+    margin-left: 87px;
 }
-.timeline-item {
-}
-.timeline-item.selected > i.fa
-{
-  margin-left: -77px
-}
+
 
 .timeline-item.selected .submit-link {
   left: 86px;
+  margin-left: 0;
 }
 .timeline-item .submit-link {
   width: 100%;
-  transition: 0.5s left;
+  transition: 0.35s all;
   position: absolute;
   left: -100%;
-  margin-left: 0px;
+  margin-left: -16px;
   padding: 16px;
   font-size: 20px;
   border: none;
@@ -381,12 +454,12 @@ li.selected .timeline-item .timeline-header {
   width: 100%;
 }
 
-.timeline>li>.timeline-item>.timeline-body {
+/*.timeline>li>.timeline-item>.timeline-body {
   padding: 0 10px;
   min-height: 0;
-  transition: 0.5s height;
+  transition: 0.35s height;
   overflow: hidden;
-}
+}*/
 .timeline-body {
   background-color: white;
 }
@@ -450,4 +523,34 @@ li.selected .timeline-item .timeline-header {
 
 .margin-top {
   margin-top: 20px;
+}
+
+.timeline .timeline {
+  margin: 30px 0 30px 65px;
+}
+
+.timeline .timeline:before  {
+  display: none
+}
+.timeline .timeline .time-label {
+  margin-top: 30px;
+}
+.timeline .timeline .time-label a {
+  color: #fff;
+}
+.timeline .timeline .time-label:after {
+  display: block;
+  border: 15px solid transparent;
+  border-right-color: #aaa;
+  position: absolute;
+  left: -29px;
+  top: 0;
+}
+.timeline .timeline .time-label.submit:after {
+  border-right-color: #F39C12
+}
+
+.timeline .time-label.end:before {
+  height: 0;
+  top: 0px;
 }

@@ -17,8 +17,5 @@ module.exports = (sequelize, DataTypes) ->
         through: 'LevelAreas'
         onDelete: 'cascade'
 
-      Level.hasMany models.StudentMission,
-        onDelete: 'cascade'
-
       Level.hasOne models.StudentLevel,
         onDelete: 'cascade'

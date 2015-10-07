@@ -12,7 +12,7 @@ module.exports = (app) ->
   if app.get('env') == 'development'
     app.use (err, req, res, next) ->
       res.status err.status or 500
-      res.render 'error',
+      res.send
         message: err.message
         error: err
       return
@@ -20,7 +20,7 @@ module.exports = (app) ->
   # no stacktraces leaked to user
   app.use (err, req, res, next) ->
     res.status err.status or 500
-    res.render 'error',
+    res.send
       message: err.message
       error: {}
     return

@@ -3,67 +3,76 @@ router  = express.Router()
 models  = appRequire('models')
 
 router.get '/', (req, res, next) ->
-  res.render 'students/welcome'
+  models.User.find
+    where:
+      id: req.user.id
+    include:
+      model: models.Course
+      as: 'Students'
+      include:
+        model: models.Level
+        include:
+          model: models.StudentLevel
+          include: models.StudentMission
+  .then (data) ->
+    res.send data
 
 router.get '/:course_abbr', (req, res, next) ->
   async = require 'async'
 
-  async.waterfall [
-    (callback) ->
-      models.Course.find
+  models.StudentLevel.findAll
+    include: [
+      model: models.Level
+      include: [
+        model: models.Area
+        include: models.Mission
+      ,
+        model: models.Course
         where:
           abbr: req.params.course_abbr
-        include:
-          model: models.Level
-          include: [models.StudentLevel, {
-            model: models.Area
-            include: models.Mission
-          }]
-      .then (course) ->
-        callback null, course
-    , (course, callback) ->
+      ]
+    ,
+      model: models.StudentMission
+      include: [
+        models.Mission
+      ,
+        model: models.Comment
+        include: models.User
+      ]
+    ]
+    order: [[models.Level,'id','ASC'],[models.StudentMission,'MissionStatusId', 'DESC']]
 
-      models.Level.findAll
-        where:
-          CourseId: course.id
-        include:
-          model: models.StudentMission
-          include: [{
-              model: models.User
-              where:
-                id: req.user.id
-            },
-            {
-              model: models.Comment
-              include: models.User
-              order: [models.Comment, 'updatedAt', 'ASC']
-            },
-            models.Mission
-          ]
-        order: [['id','ASC'],[models.StudentMission, 'MissionStatusId', 'DESC']]
-      .then (levels) ->
-        callback null,
-          course: course
-          levels: levels
-  ] , (err, result) ->
-    res.render 'students/flight', result
+  .then (levels) ->
+    for studentLevel in levels
+      for mission in studentLevel.StudentMissions
+        mission.Mission.description = mission.Mission?.description?.toString('utf8')
+        for comment in mission.Comments
+          comment.text = comment.text?.toString('utf8')
+      for area in studentLevel.Level.Areas
+        for mission in area.Missions
+          mission.description = mission.description?.toString('utf8')
 
-router.get '/:course_abbr/join', (req, res, next) ->
+    res.send levels
+
+router.post '/:course_abbr/join', (req, res, next) ->
   models.Course.find
     where:
       abbr: req.params.course_abbr
     include: models.Level
   .then (course) ->
     course.addStudent req.user.id
+    .catch (error) ->
+      console.log error
     studentLevels = []
     for level in course.Levels
       studentLevels.push
         LevelId: level.id
         UserId: req.user.id
         to_complete: level.to_complete
+        name: level.name
 
     models.StudentLevel.bulkCreate studentLevels
-    res.redirect "/flights/#{req.params.course_abbr}"
+    res.send 200
 
 router.post '/mission', (req, res, next) ->
   req.body.UserId = req.user.id
@@ -101,12 +110,12 @@ router.put '/mission', (req, res, next) ->
   .catch (err) ->
     console.log err
 
-router.get '/:course_abbr/delete/:id', (req, res, next) ->
+router.delete '/mission/:id', (req, res, next) ->
   models.StudentMission.destroy
     where:
       id: req.params.id
   .then () ->
-    res.redirect "/flights/#{req.params.course_abbr}"
+    res.sendStatus 200
   .catch (err) ->
     console.log err
 

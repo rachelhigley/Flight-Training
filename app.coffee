@@ -16,6 +16,8 @@ app.set 'views', path.join(__dirname, 'views')
 # view engine setup
 app.set 'view engine', 'jade'
 
+app.use express.static(path.join(__dirname, 'public'))
+
 # uncomment after placing your favicon in /public
 #app.use(favicon(__dirname + '/public/favicon.ico'));
 app.use logger('dev')
@@ -33,7 +35,7 @@ app.use session
 app.use passport.initialize()
 app.use passport.session()
 
-app.use express.static(path.join(__dirname, 'public'))
+
 
 app.use require('node-sass-middleware')
   src: __dirname
@@ -42,36 +44,41 @@ app.use require('node-sass-middleware')
   outputStyle: 'compressed'
   prefix: '/prefix.'
 
-# add styles to all pages
-app.use (req, res, next) ->
-
-  app.locals.user = req.user
-  if req.user
-    models = appRequire('models')
-    models.User.find
-      where:
-        id: req.user.id
-      include: [{
-          model: models.Course
-          as: 'Students'
-        },
-        {
-          model: models.Course
-          as: 'Teachers'
-        }
-      ]
-    .then (user) ->
-      app.locals.courses = user.Teachers
-      app.locals.flights = user.Students
-      app.locals.type = if user.UserTypeId is 2 then 'faculty' else ''
-      next()
-  else
-    next()
-
 # setup routes
 appRequire('routes') app
 
 # use errors
 appRequire('core/errors') app
+
+
+fs = require 'fs'
+coffee = require 'coffee-script'
+async = require 'async'
+
+fileData = ""
+
+readDir = (folder, dirRead) ->
+  files = fs.readdirSync(folder)
+  async.eachSeries files, (file,fileCallback) ->
+    # ignore hidden folders
+    if file.indexOf('.') is 0
+      fileCallback()
+    # if it is a file with an ext
+    else if file.indexOf('.') > 0
+      fs.readFile folder + '/' + file, 'utf8', (err, data) ->
+        fileData += "\n#{data}"
+        fileCallback()
+    #  if it is file
+    else
+      readDir folder + '/' + file, (data) ->
+        fileCallback()
+  , (err) ->
+    dirRead(err)
+
+
+
+readDir __dirname + '/app', (files) ->
+  compiled = coffee.compile fileData
+  fs.writeFile 'public/js/app.js', compiled, (err) ->
 
 module.exports = app

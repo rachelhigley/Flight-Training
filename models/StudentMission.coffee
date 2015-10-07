@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) ->
         onDelete: 'cascade'
       StudentMission.belongsTo models.MissionStatus,
         onDelete: 'cascade'
-      StudentMission.belongsTo models.Level,
+      StudentMission.belongsTo models.StudentLevel,
         onDelete: 'cascade'
       StudentMission.hasMany models.Comment,
         onDelete: 'cascade'

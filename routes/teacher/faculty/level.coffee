@@ -3,12 +3,12 @@ router  = express.Router()
 models  = appRequire('models')
 
 # add the level to the term
-router.post '/:id', (req, res, next) ->
+router.put '/', (req, res, next) ->
   models.Level.update req.body,
     where:
-      id: req.params.id
-  .then () ->
-    res.redirect "/faculty/flights/#{req.course_abbr}/settings"
+      id: req.body.id
+  .then (data) ->
+    res.send data
 
 
 module.exports = router
