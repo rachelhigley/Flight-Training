@@ -5,6 +5,16 @@ section.content-header
 //- Main content
 section.content
   .well(collapse="!showSettings")
+    h4.text-uppercase Level Locking
+    .radio(ng-repeat="type in course.LockTypes")
+      label
+        input(type="radio", ng-model="course.LockTypeId", value="{{type.id}}")
+        | {{type.value}}
+    button.btn.btn-warning(ng-click="updateLockType()") Save
+    br
+    br
+    br
+    h4.text-uppercase Number of Missions Per Level
     table.table
       tr
         th(width="50%") Level

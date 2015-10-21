@@ -8,10 +8,14 @@ section.content
     .row
       .col-md-12
         ul.timeline#timeline
-          li.time-label(ng-repeat-start="studentLevel in levels", ng-class="getLevelClass(levels, $index)")
-            span.text-uppercase
-              | {{studentLevel.Level.name}}
-          li.timeline-item(ng-class="getClass(mission)", ng-repeat="( missionIndex, mission) in range(studentLevel.StudentMissions,studentLevel.to_complete)", ng-repeat-end="")
+          li.time-label(ng-repeat-start="studentLevel in levels", ng-class="studentLevel.locked = getLocked(studentLevel, levels[$index-1]); getLevelClass(levels, $index)",)
+            span.text-uppercase(ng-class="{locked: studentLevel.locked}")
+              | {{studentLevel.Level.name}} - {{studentLevel.locked}}
+          li.timeline-item.locked(ng-if="studentLevel.locked")
+            i.fa
+            .timeline-item
+              h3.timeline-header Complete missions in previous levels to unlock this one
+          li.timeline-item(ng-hide="studentLevel.locked",ng-class="getClass(mission)", ng-repeat="( missionIndex, mission) in range(studentLevel.StudentMissions,studentLevel.to_complete)", ng-repeat-end="")
             input(type="text",class="submit-link",placeholder="submittion link", ng-model="link")
             i.fa
             .timeline-item(ng-if="!mission.MissionStatusId")
@@ -57,7 +61,7 @@ section.content
                   i.fa.fa-trash
               .timeline-body(collapse="mission.selected")
                 blockquote(ng-bind-html="mission.Mission.description")
-              .btn.btn-block.timeline-btn(ng-click="submitMission(mission,link); mission.selected = true")
+              .btn.btn-block.timeline-btn(ng-click="submitMission(mission,link); mission.selected = true;")
             .timeline-item(ng-if="mission.MissionStatusId === 2")
               h3.timeline-header
                 | {{mission.Mission.name}}

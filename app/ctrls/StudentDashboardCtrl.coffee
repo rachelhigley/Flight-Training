@@ -1,7 +1,6 @@
 app.controller 'StudentDashboardCtrl', ['$scope','$http', ($scope,$http) ->
   $http.get '/flights'
   .then (response) ->
-    console.log response.data
     $scope.course = response.data.Students
     $scope.getPercent = (levels) ->
       completed = 0

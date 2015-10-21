@@ -24,3 +24,6 @@ module.exports = (sequelize, DataTypes) ->
 
       Course.hasMany models.Area,
         onDelete: 'cascade'
+
+      Course.belongsTo models.LockType,
+        onDelete: 'cascade'

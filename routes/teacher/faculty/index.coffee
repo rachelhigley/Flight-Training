@@ -117,9 +117,21 @@ router.get '/:abbr/settings', (req, res, next) ->
       }]
     order: [[models.Level, 'id','ASC'], [models.Area, models.Mission, 'id','ASC']]
   .then (course) ->
-    for area in course.Areas
-      for mission in area.Missions
-        mission.description = mission.description?.toString('utf8')
-    res.send course
+    models.LockType.findAll().then (types) ->
+
+      for area in course.Areas
+        for mission in area.Missions
+          mission.description = mission.description?.toString('utf8')
+      course.dataValues.LockTypes = types
+      res.send course
+
+# update the lock level
+router.put '/course', (req, res, next) ->
+  models.Course.update req.body,
+    where:
+      id: req.body.id
+  .then (data) ->
+    res.send data
+
 
 module.exports = router

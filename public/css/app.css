@@ -71,14 +71,14 @@ li.ui-state-hover .timeline-item{
   padding-bottom: 0;
 
 }
-.timeline>li.time-label.pending span, {
+.timeline>li.time-label.pending span {
   background-color: #83CAC3;
 }
-.timeline>li.time-label.pending:before{
+.timeline>li.time-label.pending:before {
   border-color: #83CAC3;
 }
 
-.timeline>li.time-label.select span{
+.timeline>li.time-label.select span {
   background-color: #F3C070;
 }
 .timeline>li.time-label.select:before {

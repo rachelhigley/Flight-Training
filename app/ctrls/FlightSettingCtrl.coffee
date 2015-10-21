@@ -24,6 +24,13 @@ app.controller 'FlightSettingsCtrl', ['$scope', '$routeParams','$http','$timeout
     .then (data) ->
       console.log data
 
+  $scope.updateLockType = () ->
+    $http.put '/faculty/course',
+      id: $scope.course.id
+      LockTypeId: $scope.course.LockTypeId
+    .then (data) ->
+      console.log data
+
   $scope.addMission = () ->
     return if $scope.newMission is undefined
 

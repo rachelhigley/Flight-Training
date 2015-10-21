@@ -7,6 +7,7 @@ app.controller 'StudentCtrl', ['$rootScope','$scope', '$routeParams','$http', ($
   getInfo()
 
   $scope.getLevelClass = (levels, index) ->
+    return 'locked' if levels[index].locked
     if index is 0
       mission = levels[index].StudentMissions[0]
     else
@@ -76,8 +77,30 @@ app.controller 'StudentCtrl', ['$rootScope','$scope', '$routeParams','$http', ($
       mission.selected = false
 
   $scope.deleteMission = (mission_id, index, level) ->
-    console.log mission_id
     $http.delete "/flights/mission/#{mission_id}"
     .then () ->
       level.StudentMissions[index] = {}
+
+  $scope.getLocked = (currentLevel, previousLevel) ->
+    unless previousLevel
+      return false
+
+    if currentLevel.Level.Course.LockTypeId is 1
+      return false
+
+    else if currentLevel.Level.Course.LockTypeId is 2
+      submitted = 0
+      for mission in previousLevel.StudentMissions
+        submitted++ if mission.MissionStatusId > 1
+
+      return submitted != previousLevel.to_complete
+
+    else if currentLevel.Level.Course.LockTypeId is 3
+      approved = 0
+      for mission in previousLevel.StudentMissions
+        approved++ if mission.MissionStatusId is 4
+
+      return approved != previousLevel.to_complete
+
+    return false
 ]

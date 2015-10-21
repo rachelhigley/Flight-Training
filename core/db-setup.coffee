@@ -24,6 +24,9 @@ module.exports = (callback) ->
       models.CommentType.bulkCreate comment_type_data
       .catch (err) ->
 
+      models.LockType.bulkCreate lock_type_data
+      .catch (err) ->
+
       callback()
 
 user_type_data = [ {
@@ -61,5 +64,19 @@ comment_type_data = [ {
 {
   id: 2
   value: 'comment'
+}
+]
+
+lock_type_data = [ {
+  id: 1
+  value: 'All levels unlocked'
+},
+{
+  id: 2
+  value: 'Lock level until previous missions have been submited'
+},
+{
+  id: 3
+  value: 'Lock level until previous missions have been accepted'
 }
 ]
