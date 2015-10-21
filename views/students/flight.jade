@@ -26,13 +26,13 @@ section.content
                   h4
                     | {{area.name}}
                     span.pull-right
-                      i.fa.text-muted(ng-class="{'fa-chevron-up':!showArea,'fa-chevron-down':showArea}")
+                      i.fa.text-muted(ng-class="{'fa-chevron-down':!showArea,'fa-chevron-up':showArea}")
                 .list-group(collapse="!showArea")
                   .list-group-item.submit(ng-repeat="mission in area.Missions",)
                     h4.list-group-heading(ng-click="showDescription = !showDescription")
                       | {{mission.name}}
                       span.pull-right
-                        i.fa.text-muted(ng-class="{'fa-chevron-up':!showDescription,'fa-chevron-down':showDescription}")
+                        i.fa.text-muted(ng-class="{'fa-chevron-down':!showDescription,'fa-chevron-up':showDescription}")
                     .list-group-item-text(collapse="!showDescription")
                       blockquote(ng-bind-html="mission.description")
                     .btn.btn-block.timeline-btn(ng-click='selectMission(studentLevel, mission, missionIndex)')
@@ -41,7 +41,7 @@ section.content
                   h4
                     | Submit Your Own
                     span.pull-right
-                      i.fa.text-muted(ng-class="{'fa-chevron-up':!showAdd,'fa-chevron-down':showAdd}")
+                      i.fa.text-muted(ng-class="{'fa-chevron-down':!showAdd,'fa-chevron-up':showAdd}")
                 .list-group(collapse="!showAdd")
                   .list-group-item.submit
                     .list-group-item-text
