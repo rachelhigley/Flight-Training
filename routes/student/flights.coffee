@@ -21,6 +21,8 @@ router.get '/:course_abbr', (req, res, next) ->
   async = require 'async'
 
   models.StudentLevel.findAll
+    where:
+      UserId: req.user.id
     include: [
       model: models.Level
       include: [
