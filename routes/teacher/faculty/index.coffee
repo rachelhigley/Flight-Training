@@ -91,7 +91,7 @@ router.get '/:course_abbr', (req, res, next) ->
           }
         ]
       }]
-    order: [[{ model: models.User, as: 'Students' }, models.StudentMission, 'MissionStatusId', 'DESC'], [{ model: models.User, as: 'Students' }, models.StudentMission, models.Comment, 'updatedAt', 'ASC']]
+    order: [[{ model: models.User, as: 'Students' }, models.StudentMission, 'MissionStatusId', 'DESC'], [{ model: models.User, as: 'Students' }, models.StudentMission, models.Comment, 'updatedAt', 'ASC'], [{ model: models.User, as: 'Students' },'createdAt', 'ASC']]
   .then (course) ->
     if course
       for student in course.Students
