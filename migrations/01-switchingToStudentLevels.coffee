@@ -35,7 +35,8 @@ module.exports =
         migration.removeColumn 'StudentMissions', 'LevelId'
         .catch (err) ->
           debug err
-
+    .catch (err) ->
+      debug err
   down: (migration, DataTypes, done) ->
     migration.removeColumn 'StudentMissions', 'StudentLevelId'
     .catch (err) ->

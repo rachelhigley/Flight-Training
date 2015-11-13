@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) ->
         onDelete: 'cascade'
 
       User.belongsToMany models.Course,
-        through: 'Students'
+        through: models.Student
         as: 'Students'
         onDelete: 'cascade'
 

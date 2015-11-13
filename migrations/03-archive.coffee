@@ -1,17 +1,15 @@
 debug  = require('debug')('migrations')
+models = appRequire('models')
+
 module.exports =
   up: (migration, DataTypes, done) ->
-    migration.addColumn 'Courses', 'LockTypeId',
+    migration.addColumn 'Students', 'archive',
       type: DataTypes.INTEGER,
-      references: 'LockTypes',
-      referencesKey: 'id',
-      onUpdate: 'CASCADE',
-      onDelete: 'RESTRICT'
-      defaultValue: 1
+      defaultValue: 0
     .catch (err) ->
       debug err
 
   down: (migration, DataTypes, done) ->
-    migration.removeColumn 'Courses', 'LockTypeId'
+    migration.removeColumn 'Students', 'archive'
     .catch (err) ->
       debug err

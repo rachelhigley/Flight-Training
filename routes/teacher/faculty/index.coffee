@@ -67,10 +67,9 @@ router.post '/', (req, res,next) ->
 
 # get a course for the teacher
 router.get '/:course_abbr', (req, res, next) ->
-  models.Course.find req.course_id,
-    include:
-      model: models.User
-      as: 'Students'
+  models.Course.find req.course_id
+  .then (course) ->
+    course.getStudents
       include:[{
         model: models.StudentLevel
         include: {
@@ -91,16 +90,18 @@ router.get '/:course_abbr', (req, res, next) ->
           }
         ]
       }]
-    order: [[{ model: models.User, as: 'Students' }, models.StudentMission, 'MissionStatusId', 'DESC'], [{ model: models.User, as: 'Students' }, models.StudentMission, models.Comment, 'updatedAt', 'ASC'], [{ model: models.User, as: 'Students' },'createdAt', 'ASC']]
-  .then (course) ->
-    if course
-      for student in course.Students
-        for mission in student.StudentMissions
-          for comment in mission.Comments
-            comment.text = comment.text?.toString('utf8')
-      res.send course
-    else
-      res.send req.course
+      order: [[ models.StudentMission, 'MissionStatusId', 'DESC'], [ models.StudentMission, models.Comment, 'updatedAt', 'ASC'], ['createdAt', 'ASC']]
+    .then (students) ->
+      if course
+        for student in students
+          console.log student.Students
+          for mission in student.StudentMissions
+            for comment in mission.Comments
+              comment.text = comment.text?.toString('utf8')
+        course.dataValues.Students = students
+        res.send course
+      else
+        res.send req.course
   .catch (err) ->
     console.log err
 
