@@ -1,5 +1,15 @@
 app.controller 'FacultyCtrl', ['$rootScope','$scope', '$routeParams','$http', ($rootScope, $scope, $routeParams, $http) ->
+  $scope.filter = 'pending'
+  $scope.showArchive = 0
+  $scope.asc = false
 
+  $scope.orderFn = (student) ->
+    direction = if $scope.asc then 1 else -1
+    if $scope.filter is 'grade'
+      return $scope.getPercent(student.StudentMissions,student.StudentLevels) * direction
+    if $scope.filter is 'pending'
+      console.log  'direction',direction
+      return  $scope.getPending(student.StudentMissions) * direction
   $http.get '/faculty/'+ $routeParams.courseAbbr
   .then (response) ->
     $scope.course = response.data

@@ -4,6 +4,9 @@
 .pointer {
   cursor: pointer;
 }
+.text-muted.no-hover {
+  pointer-events: none;
+}
 .content-wrapper {
   min-height: 100vh;
   padding-bottom: 60px;

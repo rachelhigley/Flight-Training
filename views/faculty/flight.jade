@@ -7,6 +7,22 @@ section.content-header.oh
 //- Main content
 section.content
   h2.text-uppercase Students
+  p
+    strong
+      | Sort By:&nbsp;
+    a.selected(ng-click="filter = 'pending'", , ng-class="{'text-muted no-hover': filter == 'pending', 'pointer': filter != 'pending'}") Pending
+    | &nbsp;&nbsp;|&nbsp;&nbsp;
+    a(ng-click="filter = 'grade'", ng-class="{'text-muted no-hover': filter == 'grade', 'pointer': filter != 'grade'}") Grade
+    strong
+      | &nbsp;&nbsp;&nbsp; Order By:&nbsp;
+    a.selected(ng-click="asc = true", , ng-class="{'text-muted no-hover': asc, 'pointer': !asc}") Low to High
+    | &nbsp;&nbsp;|&nbsp;&nbsp;
+    a(ng-click="asc = false", ng-class="{'text-muted no-hover': !asc, 'pointer': asc}") High to Low
+    strong
+      | &nbsp;&nbsp;&nbsp; Show: &nbsp;
+    a(ng-click="showArchive = 0", ng-class="{'text-muted no-hover':showArchive == 0, pointer: showArchive != 0}") Active Students
+    | &nbsp;&nbsp;|&nbsp;&nbsp;
+    a(ng-click="showArchive = 1", ng-class="{'text-muted no-hover':showArchive == 1, 'pointer': showArchive != 1}") Archived Students
   ul.timeline
     li.time-label
       span.text-uppercase.pointer
@@ -15,7 +31,7 @@ section.content
         li.time-label(ng-if="!course.Students")
           span.text-uppercase
             | No Students
-        li.time-label.submit(ng-repeat-start="student in course.Students | filter: {Student: {archive: 0}}" ng-init="student.show = false", collapse="student-show", ng-click="student.show = !student.show",ng-class="{end:!student.show}")
+        li.time-label.submit(ng-repeat-start="student in course.Students | filter: {Student: {archive: showArchive}} | orderBy: orderFn" ng-init="student.show = false", collapse="student-show", ng-click="student.show = !student.show",ng-class="{end:!student.show}")
           i.fa
           span.text-uppercase.pointer
             | {{student.name}} - {{getPercent(student.StudentMissions,student.StudentLevels)}}% (Pending: {{getPending(student.StudentMissions)}})
