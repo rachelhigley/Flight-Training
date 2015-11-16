@@ -37,7 +37,7 @@ section.content
             | {{student.name}} - {{getPercent(student.StudentMissions,student.StudentLevels)}}% (Pending: {{getPending(student.StudentMissions)}})
 
 
-        li.timeline-item(collapse="!student.show",ng-class="{complete: mission.MissionStatusId === 4, select: mission.MissionStatusId === 1, resubmit: mission.MissionStatusId === 2, pending: mission.MissionStatusId === 3}", ng-repeat-end="", ng-repeat="(index, mission) in student.StudentMissions")
+        li.timeline-item(collapse="!student.show",ng-class="{complete: mission.MissionStatusId === 4, select: mission.MissionStatusId === 1, resubmit: mission.MissionStatusId === 2, pending: mission.MissionStatusId === 3}", ng-repeat-end="", ng-repeat="(index, mission) in student.StudentMissions", ng-click="showDescription = !showDescription")
           i.fa
           .timeline-item
             h3.timeline-header
@@ -46,7 +46,7 @@ section.content
                 a.btn.btn-reject(ng-click="changeStatus(mission, 2)") Reject
                 | &nbsp;
                 a.btn.btn-warning(ng-click="changeStatus(mission, 4)") Accept
-              .timeline-body(ng-if="mission.MissionStatusId === 3")
+              .timeline-body(ng-if="mission.MissionStatusId === 3 || showDescription")
                 div(ng-repeat="comment in mission.Comments")
                   include ../common/comment
                 form(ng-submit="addComment(mission,newComment)",method="post").comment
