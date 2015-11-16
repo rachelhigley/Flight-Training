@@ -37,22 +37,22 @@ section.content
             | {{student.name}} - {{getPercent(student.StudentMissions,student.StudentLevels)}}% (Pending: {{getPending(student.StudentMissions)}})
 
 
-        li.timeline-item(collapse="!student.show",ng-class="{complete: mission.MissionStatusId === 4, select: mission.MissionStatusId === 1, resubmit: mission.MissionStatusId === 2, pending: mission.MissionStatusId === 3}", ng-repeat-end="", ng-repeat="(index, mission) in student.StudentMissions", ng-click="showDescription = !showDescription")
+        li.timeline-item(collapse="!student.show",ng-class="{complete: mission.MissionStatusId === 4, select: mission.MissionStatusId === 1, resubmit: mission.MissionStatusId === 2, pending: mission.MissionStatusId === 3}", ng-repeat-end="", ng-repeat="(index, mission) in student.StudentMissions", )
           i.fa
           .timeline-item
-            h3.timeline-header
+            h3.timeline-header(ng-click="showDescription = !showDescription")
               | {{index + 1}}. {{mission.Mission.name}}
               .pull-right(ng-if="mission.MissionStatusId === 3")
                 a.btn.btn-reject(ng-click="changeStatus(mission, 2)") Reject
                 | &nbsp;
                 a.btn.btn-warning(ng-click="changeStatus(mission, 4)") Accept
-              .timeline-body(ng-if="mission.MissionStatusId === 3 || showDescription")
-                div(ng-repeat="comment in mission.Comments")
-                  include ../common/comment
-                form(ng-submit="addComment(mission,newComment)",method="post").comment
-                  h4 Add Comment
-                  textarea.textarea(ng-model="newComment.text", placeholder='Comment', style='width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;')
-                  button.btn.btn-warning.timeline-btn.btn-block(type="submit") Send Comment
+            .timeline-body(ng-if="mission.MissionStatusId === 3 || showDescription")
+              div(ng-repeat="comment in mission.Comments")
+                include ../common/comment
+              form(ng-submit="addComment(mission,newComment)",method="post").comment
+                h4 Add Comment
+                textarea.textarea(ng-model="newComment.text", placeholder='Comment', style='width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;')
+                button.btn.btn-warning.timeline-btn.btn-block(type="submit") Send Comment
 
 
 
