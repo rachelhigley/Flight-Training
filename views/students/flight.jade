@@ -45,13 +45,14 @@ section.content
                 .list-group(collapse="!showAdd")
                   .list-group-item.submit
                     .list-group-item-text
-                      .form-group
-                        label Title
-                        input.form-control(type="text",name="name")
-                      .form-group
-                        label Description
-                        textarea.textarea(name="description")
-                    button.btn.btn-block.timeline-btn(type="submit")
+                      form(ng-submit="submitOwn(studentLevel, own, missionIndex)")
+                        .form-group
+                          label Title
+                          input.form-control(type="text",ng-model="own.name")
+                        .form-group
+                          label Description
+                          textarea.textarea(ng-model="own.description")
+                        button.btn.btn-block.timeline-btn(type="submit")
               .btn.btn-block.timeline-btn(ng-click="showMission = !showMission")
             .timeline-item(ng-if="mission.MissionStatusId === 1")
 

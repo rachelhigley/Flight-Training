@@ -76,6 +76,20 @@ app.controller 'StudentCtrl', ['$rootScope','$scope', '$routeParams','$http', ($
       mission.Comments.push data.Comment
       mission.selected = false
 
+  $scope.submitOwn = (level, mission, index) ->
+    data = mission
+    data.StudentLevelId = level.id
+    data.MissionStatusId = 1
+    $http.post '/flights/add/mission', data
+    .then (response) ->
+      level.StudentMissions[index] =
+        MissionStatusId: 1
+        Mission: mission
+        id: response.data.id
+
+
+
+
   $scope.deleteMission = (mission_id, index, level) ->
     $http.delete "/flights/mission/#{mission_id}"
     .then () ->
