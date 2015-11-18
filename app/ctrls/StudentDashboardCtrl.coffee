@@ -10,6 +10,7 @@ app.controller 'StudentDashboardCtrl', ['$scope','$http', ($scope,$http) ->
         for mission in level.StudentLevel.StudentMissions
           completed++ if mission.MissionStatusId is 4
 
+      console.log completed, total
       return parseInt completed / total * 100
 
 ]

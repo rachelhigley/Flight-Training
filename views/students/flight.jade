@@ -10,7 +10,7 @@ section.content
         ul.timeline#timeline
           li.time-label(ng-repeat-start="studentLevel in levels", ng-class="studentLevel.locked = getLocked(studentLevel, levels[$index-1]); getLevelClass(levels, $index)",)
             span.text-uppercase(ng-class="{locked: studentLevel.locked}")
-              | {{studentLevel.Level.name}} - {{studentLevel.locked}}
+              | {{studentLevel.Level.name}}
           li.timeline-item.locked(ng-if="studentLevel.locked")
             i.fa
             .timeline-item
