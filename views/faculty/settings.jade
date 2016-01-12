@@ -38,7 +38,7 @@ section.content
 
     //- Add Level
     li.timeline-item.add
-      i.fa
+      i.fa.timeline-icon.color.submit
       form(ng-submit="addArea()").timeline-item
         .timeline-body(collapse="!showArea")
           h4 New Area
@@ -53,11 +53,11 @@ section.content
                 | {{level.name}}
 
 
-        button.btn.btn-block.timeline-btn(type="submit" ng-click="showArea = !showArea") Create Area
+        button.btn.btn-block.timeline-btn.background-color.submit(type="submit" ng-click="showArea = !showArea") Create Area
 
     //- Add Mission
     li.timeline-item.add
-      i.fa
+      i.fa.timeline-icon.color.submit
       form(ng-submit="addMission()").timeline-item
         .timeline-body(collapse="!showMission")
           h4 New Mission
@@ -70,21 +70,25 @@ section.content
             input.form-control(type="text", id="name", ng-model="newMission.name")
 
           text-angular(name="description", placeholder='Description',  ng-model="newMission.description")
-        button.btn.btn-block.timeline-btn(type="submit",ng-click="showMission = !showMission") Create Mission
+        button.btn.btn-block.timeline-btn.background-color.submit(type="submit",ng-click="showMission = !showMission") Create Mission
+
     ul.timeline
       //- area titles
-      li.time-label.submit(ng-click="area.show = !area.show",ng-repeat-start="area in course.Areas", ng-class="{end: !area.show || area.Missions.length == 0}")
-        span.text-uppercase
+      li.time-label.submit(ng-click="area.show = !area.show",ng-repeat-start="area in course.Areas")
+        .line.border-color.submit(ng-show="area.show")
+        i.fa.timeline-icon.color.submit
+        span.text-uppercase.pointer.background-color.submit
           | {{area.name}} (Missions: {{area.Missions.length}})
 
       //- missions in area
       li.timeline-item.update(collapse="!area.show",ng-repeat-end="",ng-repeat="mission in area.Missions")
-        i.fa
+        .line.border-color.submit
+        i.fa.timeline-icon.color.submit
         form(ng-submit="updateMission(mission)").timeline-item
           h3.timeline-header
             | {{mission.name}}
             a.pull-right.fa.fa-trash(ng-click="deleteMission(area.Missions, $index)")
           .timeline-body
             text-angular(ng-model="mission.description")
-          button.btn.btn-warning.btn-block.timeline-btn(type="submit")
+          button.btn.btn-warning.btn-block.timeline-btn.background-color.submit(type="submit")
             | {{ mission.button ? mission.button : 'Update Mission'}}

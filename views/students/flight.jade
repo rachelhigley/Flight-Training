@@ -98,4 +98,4 @@ section.content
                   blockquote(ng-if="comment.CommentTypeId !== 1")
                     strong {{comment.User.name}}:&nbsp;
                     | {{comment.text}}
-                    .meta.pull-right {{comment.createdAt | date: 'short'}}
+                    .meta.pull-right {{comment.createdAt | date: 'EEE MMM d, y h:mm a'}}

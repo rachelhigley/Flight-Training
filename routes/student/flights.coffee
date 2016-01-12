@@ -80,10 +80,17 @@ router.post '/mission', (req, res, next) ->
   req.body.UserId = req.user.id
   models.StudentMission.create req.body
   .then (data) ->
+    models.Comment.create
+      CommentTypeId: 2
+      StudentMissionId: data.id
+      UserId: req.user.id
+      text: "selected mission"
     res.send
       id: data.id
   .catch (err) ->
     res.sendStatus 200
+
+
 
 router.post '/add/mission', (req, res, next) ->
   models.Mission.create req.body
@@ -92,6 +99,11 @@ router.post '/add/mission', (req, res, next) ->
     req.body.MissionId = data.id
     models.StudentMission.create req.body
     .then (data) ->
+      models.Comment.create
+        CommentTypeId: 2
+        StudentMissionId: data.id
+        UserId: req.user.id
+        text: "selected mission"
       res.send
         id: data.id
     .catch (err) ->

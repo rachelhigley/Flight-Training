@@ -1,8 +1,8 @@
 .card(ng-if="comment.CommentTypeId === 1")
   a.embedly-card(href="{{comment.text}}", data-card-width="100%" target="_blank") {{comment.text}}
-  .meta {{comment.createdAt | date: 'short'}}
+  .meta {{comment.createdAt | date: 'EEE MMM d, y h:mm a'}}
 
 blockquote.embedly-card(ng-if="comment.CommentTypeId != 1")
   strong {{comment.User.name}}:&nbsp;
   | {{comment.text}}
-  .meta.pull-right {{comment.createdAt | date: 'short'}}
+  .meta.pull-right {{comment.createdAt | date: 'EEE MMM d, y h:mm a'}}

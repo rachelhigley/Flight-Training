@@ -44,7 +44,7 @@ section.content
           .timeline-item(class="{{mission | class}}")
             h3.timeline-header(ng-click="showDescription = !showDescription")
               | {{index + 1}}. {{mission.Mission.name}}
-              .pull-right(ng-if="mission.MissionStatusId === 3", style="margin: -8px")
+              .pull-right(ng-if="mission.MissionStatusId === 3", style="margin-top: -8px")
                 a.btn.btn-reject(ng-click="changeStatus(mission, 2)") Reject
                 | &nbsp;
                 a.btn.btn-warning(ng-click="changeStatus(mission, 4)") Accept
