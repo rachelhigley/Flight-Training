@@ -1,0 +1,311 @@
+$pending: #83CAC3
+$select: #F3C070
+$submit: #F39C12
+$resubmit: #CF850F
+$complete: #21C0B5
+
+@function unicode($str)
+  @return unquote("\"")+unquote(str-insert($str, "\\", 1))+unquote("\"")
+
+// colors
+.background-color
+  background-color: white
+  &.pending
+    background-color: $pending !important
+  &.select
+    background-color: $select !important
+  &.submit
+    background-color: $submit !important
+  &.resubmit
+    background-color: $resubmit !important
+  &.complete
+    background-color: $complete !important
+
+.border-color
+  &.pending
+    border-color: $pending !important
+  &.select
+    border-color: $select !important
+  &.submit
+    border-color: $submit !important
+  &.resubmit
+    border-color: $resubmit !important
+  &.complete
+    border-color: $complete !important
+
+.color
+  &.pending
+    color: $pending !important
+  &.select
+    color: $select !important
+  &.submit
+    color: $submit !important
+  &.resubmit
+    color: $resubmit !important
+  &.complete
+    color: $complete !important
+
+
+// Utility
+.wrapper
+  position: relative
+
+.pointer
+  cursor: pointer
+
+.text-muted.no-hover
+  pointer-events: none
+
+.content-wrapper
+  min-height: 100vh
+  padding-bottom: 60px
+
+.content
+  overflow: hidden
+  margin: 15px
+  padding: 0
+
+.main-footer
+  position: absolute
+  bottom: 0
+  width: 100%
+
+.meta
+  font-style: italic
+  display: block
+  font-size: 10px
+
+.oh
+  overflow: hidden
+
+// locked states
+.timeline-item.locked
+  background-color: rgba(255, 255, 255, 0.3)
+
+
+// fixes to ui theme
+.timeline-item .timeline-header .timeline-btn
+  margin-top: -2px
+
+.btn:hover
+  color: rgba(255, 255, 255, 0.6)
+
+.missions
+  ul
+    position: absolute
+    z-index: -1
+    top: 0
+    left: 100%
+    height: 100%
+    width: auto
+    white-space: nowrap
+    transform: translateX(-100%)
+    background: #B44659
+    transition: 0.35s transform
+  &:hover ul
+    transform: translateX(0)
+
+.timeline:before
+  left: 46px
+  display: block
+  content: ''
+
+.time-label
+  margin-bottom: 25px
+  margin-right: 0
+
+  span
+    color: #fff
+    position: relative
+    z-index: 1
+    background-color: #aaa !important
+    min-width: 100px
+    text-align: center
+
+.timeline-header
+  padding: 21px 10px !important
+  position: relative
+  left: 0
+  transition: 0.35s all
+  margin-left: 0
+  background-color: white
+
+  .selected &
+    left: 101%
+    margin-left: 87px
+
+.timeline-body
+  background: #fff
+
+.callout
+  margin-bottom: 0
+  border-radius: 3px 3px 0 0
+  margin-top: 20px
+  border-right: 1px solid #ddd
+  border-top: 1px solid #ddd
+  border-left: 5px solid #eee
+  &.border-bottom
+    border-bottom: 1px solid #ddd
+  h4
+    margin-bottom: 0
+
+.list-group
+  border: 1px solid #ddd
+  border-left: 5px solid #eee
+  padding: 20px
+  border-radius: 0 0 3px 3px
+
+.list-group-item
+  padding: 0
+
+.list-group-heading
+  line-height: 40px
+  padding: 10px 20px
+  margin: 0
+
+.list-group-item-text
+  padding: 10px
+
+li.timeline-item .timeline-item
+  margin-left: 85px
+  margin-right: 1px
+  box-shadow: none
+  -webkit-box-shadow: none
+  background: none
+
+li.timeline-item
+  margin-right: 0
+
+.fa-trash
+  color: rgba(150,0, 0, 1)
+
+.timeline-icon
+  display: block
+  content: ''
+  border-left-color: transparent
+  border-top-color: transparent
+  border-bottom-color: transparent
+  border-right-color: currentColor
+  border-style: solid
+  position: absolute
+  border-width: 29px 35px
+  top: 0 !important
+  left: 16px !important
+  border-radius: 0 !important
+  background: none !important
+  margin: 0
+  padding: 0
+  width: 0
+  height: 0
+  transition: 0.35s all
+
+  .selected &
+    left: 100% !important
+    margin-left: 16px
+
+  .time-label > &
+    border-width: 15px
+    left: -28px !important
+
+  &:before
+    display: block
+    font-size: 16px
+    line-height: 50px
+    left: 14px
+    position: absolute
+    top: -25px
+    color: #fff
+
+  &.pending:before
+    // fa-clock-o
+    content: unicode("f017")
+  &.complete:before
+    // fa-check
+    content: unicode("f00c")
+  &.resubmit:before
+    //  fa-repeat
+    content: unicode("f01e")
+  &.submit:before
+    // fa-circle
+    content: unicode("f111")
+  &.add:before
+    // fa-plus
+    content: unicode("f067")
+  &.select:before
+    //  fa-circle-o
+    content: unicode("f10c")
+
+.line
+  display: block
+  content: ''
+  border: 2px solid transparent
+  width: 0px
+  height: 100%
+  position: absolute
+  left: 46px
+  transition: 0.35s all
+  top: 30px
+  padding-bottom: 11px
+  box-sizing: content-box
+
+
+.timeline-btn
+  text-transform: uppercase
+  font-size: 20px
+  line-height: 50px
+  display: inline-block
+  font-weight: 700
+  border-radius: 0 0 3px 3px
+  padding: 3px
+  color: #fff
+
+// submittion input
+.submit-link
+  width: 94%
+  transition: 0.35s all
+  position: absolute
+  left: -100%
+  margin-left: -16px
+  padding: 16px
+  font-size: 20px
+  border: none
+  z-index: 2
+  outline: none
+  &:focus
+    border-bottom: 3px solid rgba(0,0,0,.6)
+  .selected &
+    left: 86px
+    margin-left: 0
+
+.textarea
+  width: 100%
+  height: 200px
+  font-size: 14px
+  line-height: 18px
+  border: 1px solid #dddddd
+  padding: 10px
+
+// set the top to be dark color
+.skin-yellow
+  nav.navbar.navbar-static-top
+    background: #222d32
+  .main-header .logo
+    background: #1a2226
+    border-bottom: 1px solid #222d32
+
+// hide share icons
+.embdscl0.embd-active
+  display: none !important
+
+
+
+// admin
+.timeline
+  .timeline
+    margin: 30px 0 30px 65px
+    &:before
+      display: none
+
+.btn-reject
+  background: $resubmit
+  color: white

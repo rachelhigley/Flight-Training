@@ -8,16 +8,21 @@ section.content
     .row
       .col-md-12
         ul.timeline#timeline
-          li.time-label(ng-repeat-start="studentLevel in levels", ng-class="studentLevel.locked = getLocked(studentLevel, levels[$index-1]); getLevelClass(levels, $index)",)
-            span.text-uppercase(ng-class="{locked: studentLevel.locked}")
+          li.time-label(ng-repeat-start="studentLevel in levels", ng-class="studentLevel.locked = getLocked(studentLevel, levels[$index-1]);",class="{{getLevelClass(levels, $index) | class}}")
+            .line.border-color(class="{{getLevelClass(levels, $index) | class}}")
+            span.text-uppercase.background-color(ng-class="{locked: studentLevel.locked}", class="{{getLevelClass(levels, $index) | class}}")
               | {{studentLevel.Level.name}}
           li.timeline-item.locked(ng-if="studentLevel.locked")
             i.fa
             .timeline-item
               h3.timeline-header Complete missions in previous levels to unlock this one
-          li.timeline-item(ng-hide="studentLevel.locked",ng-class="getClass(mission)", ng-repeat="( missionIndex, mission) in range(studentLevel.StudentMissions,studentLevel.to_complete)", ng-repeat-end="")
+          li.timeline-item(ng-hide="studentLevel.locked", ng-class="{selected: mission.selected}" ng-repeat="( missionIndex, mission) in range(studentLevel.StudentMissions,studentLevel.to_complete)", ng-repeat-end="")
+            .line.border-color(class="{{mission | class}}")
             input(type="text",class="submit-link",placeholder="submittion link", ng-model="link")
-            i.fa
+            i.fa.timeline-icon.color(class="{{mission | class}}")
+
+            //- Empty Item
+            //- Class: Select
             .timeline-item(ng-if="!mission.MissionStatusId")
               h3.timeline-header(collapse="!showMission")
                 | Select Mission
@@ -35,7 +40,7 @@ section.content
                         i.fa.text-muted(ng-class="{'fa-chevron-down':!showDescription,'fa-chevron-up':showDescription}")
                     .list-group-item-text(collapse="!showDescription")
                       blockquote(ng-bind-html="mission.description")
-                    .btn.btn-block.timeline-btn(ng-click='selectMission(studentLevel, mission, missionIndex)')
+                    .btn.btn-block.timeline-btn.background-color.submit(ng-click='selectMission(studentLevel, mission, missionIndex)') Select
                 div(ng-repeat-end="")
                 .callout(ng-click="showAdd = !showAdd", ng-class="{'border-bottom':!showAdd}")
                   h4
@@ -52,29 +57,40 @@ section.content
                         .form-group
                           label Description
                           textarea.textarea(ng-model="own.description")
-                        button.btn.btn-block.timeline-btn(type="submit")
-              .btn.btn-block.timeline-btn(ng-click="showMission = !showMission")
-            .timeline-item(ng-if="mission.MissionStatusId === 1")
+                        button.btn.btn-block.timeline-btn.background-color.submit(type="submit") Submit
+              .btn.btn-block.timeline-btn.background-color.select(ng-click="showMission = !showMission") Select Mission
 
+            //- Selected Item
+            //- Class: Selected
+            .timeline-item(ng-if="mission.MissionStatusId === 1")
               h3.timeline-header
                 | {{mission.Mission.name}}
                 a(ng-click="deleteMission(mission.id, missionIndex,studentLevel)").pull-right
                   i.fa.fa-trash
               .timeline-body(collapse="mission.selected")
                 blockquote(ng-bind-html="mission.Mission.description")
-              .btn.btn-block.timeline-btn(ng-click="submitMission(mission,link); mission.selected = true;")
+              .btn.btn-block.timeline-btn.background-color.submit(ng-click="submitMission(mission,link); mission.selected = true;") Submit Mission
+
+            //- Rejected Item
+            //- Class: Resubmit
             .timeline-item(ng-if="mission.MissionStatusId === 2")
               h3.timeline-header
                 | {{mission.Mission.name}}
               .timeline-body(collapse="mission.selected")
                dic(ng-repeat="comment in mission.Comments")
                   include ../common/comment
-              .btn.btn-block.timeline-btn(ng-click="submitMission(mission,link); mission.selected = true")
+              .btn.btn-block.timeline-btn.background-color.resubmit(ng-click="submitMission(mission,link); mission.selected = true",class="{{mission | class}}") Resubmit Mission
+
+            //- Submitted Item
+            //- Class: Submitting
             .timeline-item(ng-if="mission.MissionStatusId === 3")
               h3.timeline-header {{mission.Mission.name}}
               .timeline-body(ng-show="mission.Comments.length")
                 div(ng-repeat="comment in mission.Comments")
                   include ../common/comment
+
+            //- Accepted Item
+            //- Class: Complete
             .timeline-item(ng-if="mission.MissionStatusId === 4")
               h3.timeline-header {{mission.Mission.name}}
               .timeline-body(ng-show="mission.Comments.length")
@@ -82,106 +98,4 @@ section.content
                   blockquote(ng-if="comment.CommentTypeId !== 1")
                     strong {{comment.User.name}}:&nbsp;
                     | {{comment.text}}
-
-script(type='text/javascript').
-  $(function () {
-    $('#timeline').on('click','.list-group-item .btn', function(event) {
-        if(this.tagName === 'BUTTON')
-        {
-          var mission = $(this).parent();
-          var name = mission.find('input').val();
-          var desc = mission.find('textarea').val();
-          var item = mission.closest('.timeline-item');
-          var level_id = item.parent().attr('level-id');
-          $.ajax({
-            url: '/flights/add/mission',
-            method: 'POST',
-            data:{
-              name: name,
-              description: desc,
-              LevelId: level_id,
-              MissionStatusId: 1
-            },
-            success: function(data)
-            {
-              item.parent().attr('data-toggle','').attr('href','').removeClass('select').addClass('submit').attr('mission-id',data.id);
-              var course_abbr = $('.content').attr('course-abbr')
-              var trash = $('<a href="" class="pull-right"></a>').attr('href',course_abbr+"/delete/"+data.id).html('<i class="fa fa-trash"></i>')
-              item.prepend('<div class="timeline-header"></div>').find('.timeline-header').text(name).append(trash);
-              mission_descr = $("<blockquote></blockquote").text(desc)
-              item.find('.timeline-body').addClass('in').attr('style','').html(mission_descr);
-
-            }
-
-            })
-
-        }
-        else {
-          var mission = $(this).parent();
-          var mission_id = mission.attr('mission-id');
-          var item = mission.closest('.timeline-item');
-          var level_id = item.parent().attr('level-id');
-          $.ajax({
-              url: '/flights/mission',
-              method: 'POST',
-              data: {
-                MissionId: mission_id,
-                LevelId: level_id,
-                MissionStatusId: 1
-              },
-              success: function(data)
-              {
-                item.parent().attr('data-toggle','').attr('href','').removeClass('select').addClass('submit').attr('mission-id',data.id);
-                var course_abbr = $('.content').attr('course-abbr')
-              var trash = $('<a href="" class="pull-right"></a>').attr('href',course_abbr+"/delete/"+data.id).html('<i class="fa fa-trash"></i>')
-                item.prepend('<div class="timeline-header"></div>').find('.timeline-header').text(mission.find('.list-group-heading').text()).append(trash);;
-                mission_descr = mission.find('.list-group-item-text').html();
-                item.find('.timeline-body').addClass('in').attr('style','').html(mission_descr);
-              }
-            });
-        }
-      })
-
-      $('#timeline').on('click','.timeline-item[class*="submit"] .btn', function(event)
-        {
-
-          var item = $(this).closest('li.timeline-item');
-          var body = item.find('.timeline-body')
-          if(!item.hasClass('selected'))
-          {
-            item.prepend('<input type="text" class="submit-link" placeholder="submittion link" />')
-            setTimeout(function() {
-              item.addClass('selected');
-            });
-            body.html('');
-          }
-          else
-          {
-            var id = item.attr('mission-id');
-            var link = item.find('input').val();
-            var data = {
-              StudentMission: {
-                id: id,
-                MissionStatusId: 3,
-              },
-              Comment: {
-                StudentMissionId: id,
-                text: link,
-                CommentTypeId: 1
-              }
-            }
-            $.ajax({
-              url: '/flights/mission',
-              method: 'PUT',
-              contentType: "application/json",
-              data:  JSON.stringify(data),
-              success: function(){
-                item.addClass('pending').removeClass('submit').removeClass('resubmit').removeClass('selected').find('input').remove();
-                body.append('<a class="embedly-card" data-card-width="100%" href="'+link+'">')
-
-              }
-            })
-          }
-
-        });
-      });
+                    .meta.pull-right {{comment.createdAt | date: 'short'}}

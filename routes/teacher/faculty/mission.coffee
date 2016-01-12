@@ -35,6 +35,16 @@ router.delete '/:mission_id', (req, res, next) ->
 
 # change the mission's status
 router.put '/status', (req, res, next) ->
+  state = switch req.body.MissionStatusId
+    when 2 then 'rejected'
+    when 4 then 'accepted'
+    else false
+  if state
+    models.Comment.create
+      CommentTypeId: 2
+      StudentMissionId: req.body.id
+      UserId: req.user.id
+      text: " marked your mission as " + state
   models.StudentMission.update req.body,
     where:
       id: req.body.id

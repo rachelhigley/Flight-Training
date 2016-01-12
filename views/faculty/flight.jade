@@ -31,18 +31,20 @@ section.content
         li.time-label(ng-if="!course.Students")
           span.text-uppercase
             | No Students
-        li.time-label.submit(ng-repeat-start="student in course.Students | filter: {Student: {archive: showArchive}} | orderBy: orderFn" ng-init="student.show = false", collapse="student-show", ng-click="student.show = !student.show",ng-class="{end:!student.show}")
-          i.fa
-          span.text-uppercase.pointer
+        li.time-label(ng-repeat-start="student in course.Students | filter: {Student: {archive: showArchive}} | orderBy: orderFn" ng-init="student.show = false", collapse="student-show", ng-click="student.show = !student.show",ng-class="{end:!student.show}")
+          .line.border-color.submit(ng-show="student.show")
+          i.fa.timeline-icon.color.submit
+          span.text-uppercase.pointer.background-color.submit
             | {{student.name}} - {{getPercent(student.StudentMissions,student.StudentLevels)}}% (Pending: {{getPending(student.StudentMissions)}})
 
 
-        li.timeline-item(collapse="!student.show",ng-class="{complete: mission.MissionStatusId === 4, select: mission.MissionStatusId === 1, resubmit: mission.MissionStatusId === 2, pending: mission.MissionStatusId === 3}", ng-repeat-end="", ng-repeat="(index, mission) in student.StudentMissions", )
-          i.fa
-          .timeline-item
+        li.timeline-item(collapse="!student.show", ng-repeat-end="", ng-repeat="(index, mission) in student.StudentMissions")
+          .line.border-color(class="{{mission | class}}")
+          i.fa.timeline-icon.color(class="{{mission | class}}")
+          .timeline-item(class="{{mission | class}}")
             h3.timeline-header(ng-click="showDescription = !showDescription")
               | {{index + 1}}. {{mission.Mission.name}}
-              .pull-right(ng-if="mission.MissionStatusId === 3")
+              .pull-right(ng-if="mission.MissionStatusId === 3", style="margin: -8px")
                 a.btn.btn-reject(ng-click="changeStatus(mission, 2)") Reject
                 | &nbsp;
                 a.btn.btn-warning(ng-click="changeStatus(mission, 4)") Accept

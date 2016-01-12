@@ -13,24 +13,7 @@ app.controller 'StudentCtrl', ['$rootScope','$scope', '$routeParams','$http', ($
     else
       mission = levels[index-1].StudentMissions[levels[index-1].StudentMissions.length-1]
 
-    $scope.getClass mission
-
-  $scope.getClass = (mission) ->
-    return 'select' unless mission?.MissionStatusId
-    return 'selected select' if mission.selected
-    cssClass = switch mission.MissionStatusId
-      when 1
-        'submit'
-      when 2
-        'resubmit'
-      when 3
-        'pending'
-      when 4
-        'complete'
-      else
-        'select'
-
-    cssClass
+    mission
 
   $scope.joinFlight = () ->
     $http.post "/flights/#{$routeParams.courseAbbr}/join"
